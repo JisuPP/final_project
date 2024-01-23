@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>제주에서 어디올레?</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+
+    {% comment %} <style>
+        body {
+            background-color: #f7fafc;
+            font-family: 'Noto Sans KR', sans-serif;
+            line-height: 1.6;
+            font-size: 16px;
+            margin: 0;
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 2rem;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: relative; /* Make container a positioning context */
+        }
+
+        .nav-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        .nav-bar h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #374151;
+            margin: 0;
+            flex-grow: 1; /* Add this line */
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .nav-links a {
+            color: #6b7280;
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 700;
+            transition: color 0.3s ease-in-out;
+        }
+
+        .nav-links a:hover {
+            color: #4b5563;
+        }
+
+        .recommended-destinations {
+            margin-top: 3rem;
+            text-align: center;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .destination-card {
+            background-color: #f7fafc;
+            padding: 1.0rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .destination-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .photo-placeholder {
+            background-color: #e4e4e7;
+            width: 100%;
+            height: 200px;
+            border-radius: 0.25rem;
+        }
+
+        .destination-title {
+            margin-top: 1rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .destination-description {
+            margin-top: 0.5rem;
+            font-size: 1rem;
+            color: #6b7280;
+        }
+    </style> {% endcomment %}
+</head>
+
+<body>
+    <div class="container">
+        <!-- Navigation Bar -->
+        <div class="nav-bar">
+            <h1>제주에서 어디올레?</h1>
+        </div>
+            <div class="nav-links">
+                <a href="#" class="text-gray-600 hover:text-gray-800">Home</a>
+                <a href="#" class="text-gray-600 hover:text-gray-800">About</a>
+                <a href="#" class="text-gray-600 hover:text-gray-800">Others..</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recommended Destinations Section -->
+    <div class="recommended-destinations">
+        <h2 class="text-3xl font-bold mb-6">추천 결과 !!!</h2>
+        <div class="grid">
+
+        <!-- Destination 1 -->
+        <div class="destination-card">
+                <div class="photo-placeholder"></div>
+                <div class="destination-title">추천지 1</div>
+                <div class="destination-description">추천지 1의 상세설명</div>
+            </div>
+
+                <!-- Destination 2 -->
+            <div class="destination-card">
+                <div class="photo-placeholder"></div>
+                <div class="destination-title">추천지 2</div>
+                <div class="destination-description">추천지 2의 상세설명</div>
+            </div>
+
+                <!-- Destination 3 -->
+            <div class="destination-card">
+                <div class="photo-placeholder"></div>
+                <div class="destination-title">추천지 3</div>
+                <div class="destination-description">추천지 3의 상세설명</div>
+            </div>  
+            
+        </div>
+    </div>
+
+    <h2>추천 결과</h2>
+    <table border="1">
+        <tr>
+            <th>여행지 명칭</th>
+            <th>가중 평점</th>
+            <th>개요</th>
+            <th>유사도</th>
+        </tr>
+        {% for index, row in result_df.iterrows %}
+            <tr>
+                <td>{{ row.명칭 }}</td>
+                <td>{{ row.weighted_평점 }}</td>
+                <td>{{ row.개요 }}</td>
+                <td>{{ row.similarity }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+</body>
