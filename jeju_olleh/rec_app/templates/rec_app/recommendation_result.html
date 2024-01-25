@@ -16,10 +16,10 @@
         </tr>
         {% for index, row in result_df.iterrows %}
             <tr>
-                <td>{{ row.명칭 }}</td>
-                <td>{{ row.weighted_평점 }}</td>
-                <td>{{ row.개요 }}</td>
-                <td>{{ row.similarity }}</td>
+                <td>{{row.명칭 }}</td>
+                <td>{{row.weighted_평점 }}</td>
+                <td>{{row.개요 }}</td>
+                <td>{{row.similarity }}</td>
             </tr>
         {% endfor %}
     </table>

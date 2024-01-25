@@ -1,0 +1,42 @@
+<body>
+    <div class="container">
+        <!-- Navigation Bar -->
+        <div class="nav-bar">
+            <h1>About</h1>
+        </div>
+        <div class="nav-links">
+            <a href="{% url 'rec_app:recommendation_input' %}" class="text-gray-700 hover:text-gray-600">Home</a>
+            <a href= "{% url 'rec_app:about' %}" class="text-gray-700 hover:text-gray-600">About</a>
+            <a href="#" class="text-gray-700 hover:text-gray-600">Others..</a>
+        </div>
+    </div>
+
+    <!-- Content section-->
+    <section class="main-content">
+        <div class="container">
+            <div>
+                <div style="display: flex; flex-direction: column;">
+                    <h2 style="margin-bottom: 10px;">제주에서 어디올레?</h2>
+                    <h5>여행자의 유형을 고려한 제주 여행지 추천 시스템</h5>
+                    <p>제주도에 많은 여행지가 있지만 자신에게 맞는 여행지를 선택하지 못하는 이들을 위해서 자신과 비슷한 유형의
+                        여행자들은 어디를 갔는지를 바탕으로 여행지를 추천하는 서비스</p>
+                </div>
+            </div>
+            <hr>
+            <!-- 팀원 설명 추가 -->
+            <div class="container">
+                <div>
+                    <h5>4조</h5>
+                    <p>강병욱, 김민서, 박지수, 이상민, 이윤희</p>
+                </div>
+                <div>
+                    <h5>수행 도구 </h5>
+                    <p>Front end : CSS, HTML, Javascript <br>
+                        Back end: python, Django<br>
+                        데이터: pandas, numpy, matplotlib, seaborn
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>

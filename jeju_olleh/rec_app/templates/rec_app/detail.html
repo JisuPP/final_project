@@ -1,5 +1,4 @@
-<!-- detail.html -->
-
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -8,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ selected_destination.명칭 }}</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 
 <body>
@@ -17,8 +17,8 @@
             <h1>{{ selected_destination.명칭 }}</h1>
         </div>
         <div class="nav-links">
-            <a href="#" class="text-gray-700 hover:text-gray-600">About</a>
-            <a href="#" class="text-gray-700 hover:text-gray-600">Graph</a>
+            <a href="{% url 'rec_app:recommendation_input' %}" class="text-gray-700 hover:text-gray-600">Home</a>
+            <a href= "{% url 'rec_app:about' %}" class="text-gray-700 hover:text-gray-600">About</a>
             <a href="#" class="text-gray-700 hover:text-gray-600">Others..</a>
         </div>
     </div>

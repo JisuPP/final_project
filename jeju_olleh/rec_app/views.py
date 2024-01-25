@@ -43,4 +43,6 @@ def detail(request, destination):
     selected_destination = df[df['명칭'] == destination].iloc[0]
     return render(request, 'rec_app/detail.html', {'selected_destination': selected_destination})
 
-
+def about(request):
+    # About 페이지에 대한 뷰 로직을 작성합니다.
+    return render(request, 'rec_app/about.html')
