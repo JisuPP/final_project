@@ -7,131 +7,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>제주에서 어디올레?</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
-
-
-    {% comment %} <style>
-        body {
-            background-color: #f7fafc;
-            font-family: 'Noto Sans KR', sans-serif;
-            line-height: 1.6;
-            font-size: 16px;
-            margin: 0;
-        }
-
-        .container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1.5rem 2rem;
-            background-color: #fff;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            position: relative; /* Make container a positioning context */
-        }
-
-        .nav-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-        }
-
-        .nav-bar h1 {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #374151;
-            margin: 0;
-            flex-grow: 1; /* Add this line */
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .nav-links a {
-            color: #6b7280;
-            text-decoration: none;
-            font-size: 0.875rem;
-            font-weight: 700;
-            transition: color 0.3s ease-in-out;
-        }
-
-        .nav-links a:hover {
-            color: #4b5563;
-        }
-
-        .main-content {
-            margin-top: 2rem;
-            background-color: #fff;
-            padding: 2rem;
-            border-radius: 0.5rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            position: relative; 
-        }
-
-        .main-content h2 {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: #374151;
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 0.875rem;
-            font-weight: 700;
-            color: #4b5563;
-            margin-bottom: 0.5rem;
-        }
-
-        .form-control,
-        .select-control {
-            width: 100%;
-            padding: 0.75rem;
-            font-size: 1rem;
-            border: 1px solid #e2e8f0;
-            border-radius: 0.25rem;
-        }
-
-        .select-control {
-            appearance: none;
-        }
-
-        .button-container {
-            display: flex;
-            justify-content: flex-end;
-            margin-top: 1.5rem;
-        }
-
-        .submit-button {
-            background-color: #2b6cb0;
-            color: #fff;
-            font-size: 1rem;
-            font-weight: 700;
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 0.25rem;
-            cursor: pointer;
-            transition: background-color 0.3s ease-in-out;
-        }
-
-        .submit-button:hover {
-            background-color: #1e4b7b;
-        }
-
-        .background-image {
-            position: relative;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
-    </style> {% endcomment %}
-
 </head>
 
 <body>
@@ -152,29 +27,9 @@
 
 </body>
 
-
-
     <!-- Main Content -->
     <div class="main-content">
-        <h2 class="text-gray-700 font-bold mb-6">사용자 정보입력</h2>
-        {% comment %} <div class="form-group">
-            <label for="current-location" class="text-gray-700 text-sm font-bold mb-2">지금 있는 곳은 어디?</label>
-            <input type="text" id="current-location" class="form-control" placeholder="현재 위치 입력">
-        </div> {% endcomment %}
-        <div class="form-group">
-            <label for="travel-want" class="text-gray-700 text-sm font-bold mb-2">당신이 원하는 여행은?</label>
-            <input type="text" id="travel-want" class="form-control" placeholder="Ex) 혼밥하기 좋은 곳">
-        </div>
-        {% comment %} <div class="form-group">
-            <label for="travel-plan" class="text-gray-700 text-sm font-bold mb-2">어떤 여행을 가실 계획?</label>
-            <select id="travel-plan" class="select-control" required>
-                <option value="cafe"> 카페
-                <option value="food"> 음식점
-                <option value="play"> 놀거리
-        </div> {% endcomment %}
-        {% comment %} 확인 버튼 클릭 시 다른 페이지로 연결되게 하는 작업 필요 {% endcomment %}
-        <button type="submit">확인</button> 
-
+        <h2 class="text-gray-700 font-bold mb-6">여행지 추천받기</h2>
         <form method="post" action="{% url 'rec_app:recommendation_input' %}">
             {% csrf_token %}
             <label for="user_input">당신이 원하는 여행은?:</label>
@@ -196,7 +51,7 @@
             </tr>
             {% for index, row in result_df.iterrows %}
                 <tr>
-                    <td>{{ row.명칭 }}</td>
+                    <td><a href="{% url 'rec_app:detail' index %}">{{ row.명칭 }}</a></td>
                     <td>{{ row.weighted_평점 }}</td>
                     <td>{{ row.개요 }}</td>
                     <td>{{ row.similarity }}</td>

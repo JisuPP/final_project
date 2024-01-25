@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>제주에서 어디올레?</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <!-- Navigation Bar -->
+        <div class="nav-bar">
+            <h1>제주에서 어디올레?</h1>
+        </div>
+        <div class="nav-links">
+            <a href="#" class="text-gray-600 hover:text-gray-800">Home</a>
+            <a href="#" class="text-gray-600 hover:text-gray-800">About</a>
+            <a href="#" class="text-gray-600 hover:text-gray-800">Others..</a>
+        </div>
+    </div>
+
+    <!-- Recommended Destinations Section -->
+
+    {% if result_df is not None and not result_df.empty %}
+    <h2>추천 결과</h2>
+    <div class="grid">
+        {% for index, row in result_df.iterrows %}
+            <!-- Destination Card -->
+            <div class="destination-card">
+                <a href="{% url 'rec_app:detail' row.명칭 %}">
+                    <div class="destination-info">
+                        <h3 class="destination-title">{{ row.명칭 }}</h3>
+                    </div>
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p>추천 결과가 없습니다.</p>
+    {% endif %}
+
+</body>
+</html>

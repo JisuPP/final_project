@@ -1,0 +1,37 @@
+<!-- detail.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ selected_destination.명칭 }}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <!-- Navigation Bar -->
+        <div class="nav-bar">
+            <h1>{{ selected_destination.명칭 }}</h1>
+        </div>
+        <div class="nav-links">
+            <a href="#" class="text-gray-700 hover:text-gray-600">About</a>
+            <a href="#" class="text-gray-700 hover:text-gray-600">Graph</a>
+            <a href="#" class="text-gray-700 hover:text-gray-600">Others..</a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <h2 class="text-gray-700 font-bold mb-6">{{ selected_destination.명칭 }} 상세 정보</h2>
+        <div class="destination-info">
+            <p class="destination-description">{{ selected_destination.개요 }}</p>
+            <p class="destination-rating">평점: {{ selected_destination.weighted_평점 }}</p>
+            <!-- 원하는 다른 정보들도 추가할 수 있습니다 -->
+        </div>
+    </div>
+</body>
+
+</html>
