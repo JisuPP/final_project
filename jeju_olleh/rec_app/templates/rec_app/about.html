@@ -1,8 +1,20 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ selected_destination.명칭 }}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+
 <body>
     <div class="container">
         <!-- Navigation Bar -->
         <div class="nav-bar">
-            <h1>About</h1>
+            <h1>제주에서 어디올레?</h1>
         </div>
         <div class="nav-links">
             <a href="{% url 'rec_app:recommendation_input' %}" class="text-gray-700 hover:text-gray-600">Home</a>
@@ -13,7 +25,6 @@
 
     <!-- Content section-->
     <section class="main-content">
-        <div class="container">
             <div>
                 <div style="display: flex; flex-direction: column;">
                     <h2 style="margin-bottom: 10px;">제주에서 어디올레?</h2>
@@ -24,7 +35,6 @@
             </div>
             <hr>
             <!-- 팀원 설명 추가 -->
-            <div class="container">
                 <div>
                     <h5>4조</h5>
                     <p>강병욱, 김민서, 박지수, 이상민, 이윤희</p>
