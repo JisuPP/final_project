@@ -28,9 +28,21 @@
         <h2 class="text-gray-700 font-bold mb-6">{{ selected_destination.명칭 }} 상세 정보</h2>
         <div class="destination-info">
             <p class="destination-description">{{ selected_destination.개요 }}</p>
-            <p class="destination-rating">평점: {{ selected_destination.weighted_평점 }}</p>
+            <p class="destination-rating">평점: {{ selected_destination.Rating}}</p>
+            <p class="destination-reviews">리뷰수: {{ selected_destination.Reviews }}</p>
             <!-- 원하는 다른 정보들도 추가할 수 있습니다 -->
         </div>
+    </div>
+
+    {% comment %} 리뷰입력창 - url수정필요 {% endcomment %}
+    <div class = "main-content">
+        <form method="post" action="{% url 'rec_app:recommendation_input' %}">
+            {% csrf_token %}
+            <label for="review_input">해당 여행지에 다녀왔다면 리뷰를 입력해주세요!</label>
+            <textarea name="review_input" rows="5" cols="50" required></textarea>
+            <br>
+            <button type="submit">입력하기</button>
+        </form>
     </div>
 </body>
 

@@ -7,21 +7,24 @@
 </head>
 <body>
     <h2>추천 결과</h2>
-    <table border="1">
-        <tr>
-            <th>여행지 명칭</th>
-            <th>가중 평점</th>
-            <th>개요</th>
-            <th>유사도</th>
-        </tr>
-        {% for index, row in result_df.iterrows %}
+    <div>
+        <table border="1">
             <tr>
-                <td>{{row.명칭 }}</td>
-                <td>{{row.weighted_평점 }}</td>
-                <td>{{row.개요 }}</td>
-                <td>{{row.similarity }}</td>
+                <th>여행지 명칭</th>
+                <th>가중 평점</th>
+                <th>개요</th>
+                <th>유사도</th>
             </tr>
-        {% endfor %}
-    </table>
+            {% for index, row in result_df.iterrows %}
+                <tr>
+                    <td>{{row.명칭 }}</td>
+                    <td>{{row.weighted_평점 }}</td>
+                    <td>{{row.개요 }}</td>
+                    <td>{{row.similarity }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
 </body>
 </html>
