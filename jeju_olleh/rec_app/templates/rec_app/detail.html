@@ -41,6 +41,9 @@
             <label for="review_input">해당 여행지에 다녀왔다면 리뷰를 입력해주세요!</label>
             <textarea name="review_input" rows="5" cols="50" required></textarea>
             <br>
+            <label for="rating_input">평점을 입력해주세요 (0에서 5까지):</label>
+            <input type="number" name="rating_input" min="0" max="5" step="0.1" required>
+            <br>
             <button type="submit">입력하기</button>
         </form>
     </div>
