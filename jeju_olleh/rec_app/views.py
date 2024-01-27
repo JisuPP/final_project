@@ -11,6 +11,9 @@ def recommendation_input(request):
     if request.method == 'POST':
         # user_input 토큰화
         user_input = request.POST['user_input']
+        # address_input도 가져오기 
+        address_input = request.POST['address_input']
+
         keyword_input = tokenize_user_input(user_input)
         # data 가져오기
         file_path = os.path.join(settings.BASE_DIR, 'jeju_olleh', 'modules', 'fin_data_weighted_token.csv')

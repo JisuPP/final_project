@@ -33,8 +33,15 @@
         <h2 class="text-gray-700 font-bold mb-6">여행지 추천받기</h2>
         <form method="post" action="{% url 'rec_app:recommendation_input' %}">
             {% csrf_token %}
-            <label for="user_input">당신이 원하는 여행은?:</label>
-            <input type="text" name="user_input" required>
+            <div class="form-group">
+                <label for="user_input">당신이 원하는 여행지는?:</label>
+                <input type="text" name="user_input" required>
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="address_input">현재 주소를 입력해주세요:</label>
+                <input type="text" name="address_input" required>
+            </div>
             <button type="submit">추천 받기</button>
         </form>
         
