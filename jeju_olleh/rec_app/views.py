@@ -41,7 +41,7 @@ def rec_result(request):
 
 def detail(request, destination):
     # 여기에서 destination은 선택한 여행지의 명칭입니다.
-    file_path = os.path.join(settings.BASE_DIR, 'jeju_olleh', 'modules', 'fin_data_weighted_token.csv')
+    file_path = os.path.join(settings.BASE_DIR, 'jeju_olleh', 'modules', 'fin_data_weighted_token_map.csv')
     df = pd.read_csv(file_path, encoding='utf-8')
     selected_destination = df[df['명칭'] == destination].iloc[0]
     return render(request, 'rec_app/detail.html', {'selected_destination': selected_destination})
@@ -49,3 +49,7 @@ def detail(request, destination):
 def about(request):
     # About 페이지에 대한 뷰 로직을 작성합니다.
     return render(request, 'rec_app/about.html')
+
+def map(request):
+    # 관광지 전체 목록 지도로 구성
+    return render(request, 'rec_app/map.html')

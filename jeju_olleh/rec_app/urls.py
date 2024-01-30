@@ -9,4 +9,5 @@ urlpatterns = [
     path('rec_result/', views.rec_result, name='rec_result'),
     path('detail/<str:destination>/', views.detail, name='detail'),
     path('about/', views.about, name='about'),
+    path('map/',views.map, name='map' ),
 ]

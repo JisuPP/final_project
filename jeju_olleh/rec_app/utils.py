@@ -26,10 +26,12 @@ def tokenize_user_input(user_input):
     # 형태소 분석 및 불용어 제거
     tokens = [word for word, tag in pos_words if tag in ['Noun', 'Adjective'] and word not in stopwords]
     return tokens
+
 def load_tfidf_matrix(filename='tfidf_matrix.pkl'):  # 파일 경로 수정
     file_path = os.path.join(settings.BASE_DIR,  'jeju_olleh','modules', 'tfidf_matrix.pkl')
     tfidf_mat = pd.read_pickle(file_path)
     return tfidf_mat
+
 def load_tfidf_vectorizer(filename='tfidf_vectorizer.pkl'):
     file_path = os.path.join(settings.BASE_DIR, 'jeju_olleh', 'modules', filename)
     tfidf_vect= pd.read_pickle(file_path)
