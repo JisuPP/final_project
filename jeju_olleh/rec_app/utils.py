@@ -116,12 +116,6 @@ def get_nearest_weather_data(place):
     nearest_x = sorted_places.iloc[0]['격자 X']
     nearest_y = sorted_places.iloc[0]['격자 Y']
 
-    # 수정된 부분: get_weather_data 함수 호출
-    return get_weather_data(nearest_x, nearest_y)
-
-
-def get_weather_data(nx, ny):
-
     base_date = datetime.now().strftime('%Y%m%d')
 
     # base_time
@@ -130,7 +124,7 @@ def get_weather_data(nx, ny):
     else:
         base_time = str(datetime.now().hour - 1) + '30'
 
-    api_key = 'vpA5w/rqnqv5OVUvdS1jzdjrdM3lN+3Omjbnx64dXdMBMpL7xbLreYIFaigNiexQelZHSsPNMGL3A91tHKF1YQ=='
+    api_key = ''
 
     base_url = 'http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst'
 
@@ -141,8 +135,8 @@ def get_weather_data(nx, ny):
         'dataType': 'JSON',
         'base_date': base_date,
         'base_time': base_time,
-        'nx': nx,
-        'ny': ny
+        'nx': nearest_x ,
+        'ny': nearest_y
     }
 
     response = requests.get(base_url, params=params)

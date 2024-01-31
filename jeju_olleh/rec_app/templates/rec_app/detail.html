@@ -65,7 +65,7 @@
 
     {% comment %} 리뷰입력창 - url수정필요 {% endcomment %}
     <div class = "main-content">
-        <form method="post" action="{% url 'rec_app:recommendation_input' %}">
+        <form method="post" action="{% url 'rec_app:rec_input' %}">
             {% csrf_token %}
             <label for="review_input">해당 여행지에 다녀왔다면 리뷰를 입력해주세요!</label>
             <textarea name="review_input" rows="5" cols="50" required></textarea>

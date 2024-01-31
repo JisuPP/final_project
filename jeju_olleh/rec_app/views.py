@@ -33,10 +33,10 @@ def rec_input(request):
 
         if not result_df_tfidf.empty:
             # 이미지 URL 추가
-            result_df_tfidf['selected_image_url'] = result_df_tfidf['명칭'].apply(get_image_url)
+            # result_df_tfidf['selected_image_url'] = result_df_tfidf['명칭'].apply(get_image_url)
 
             # 날씨 정보 추가
-            result_df_tfidf['날씨'] = result_df_tfidf['명칭'].apply(get_nearest_weather_data)
+            result_df_tfidf['날씨'] = result_df_tfidf.apply(lambda x: get_nearest_weather_data(x['명칭']), axis=1)
 
             # 결과를 HTML로 전달
             return render(request, 'rec_app/rec_result.html', {'result_df': result_df_tfidf})
