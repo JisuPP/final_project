@@ -1,6 +1,6 @@
 import datetime, json, os, pickle, requests
 import pandas as pd
-from haversine import haversine, Unit
+import numpy as np
 from datetime import datetime
 from konlpy.tag import Okt
 from django.conf import settings
@@ -45,16 +45,16 @@ def lat_long_distance(lat1, lon1, lat2, lon2):
     # 지구의 반지름 (단위: km)
     R = 6371.0
     # 라디안으로 변환
-    lat1 = radians(lat1)
-    lon1 = radians(lon1)
-    lat2 = radians(lat2)
-    lon2 = radians(lon2)
+    lat1 = np.radians(lat1)  # 여기서 np.radians 사용
+    lon1 = np.radians(lon1)
+    lat2 = np.radians(lat2)
+    lon2 = np.radians(lon2)
     # 위도와 경도의 차이 계산
     dlon = lon2 - lon1
     dlat = lat2 - lat1
     # Haversine 공식 계산
-    a = sin(dlat / 2)**2 + cos(lat1) * cos(lat2) * sin(dlon / 2)**2
-    c = 2 * atan2(sqrt(a), sqrt(1 - a))
+    a = np.sin(dlat / 2)**2 + np.cos(lat1) * np.cos(lat2) * np.sin(dlon / 2)**2
+    c = 2 * np.arctan2(np.sqrt(a), np.sqrt(1 - a))
     # 거리 계산
     distance = R * c
     return distance
@@ -92,50 +92,58 @@ def get_address_info(address):
         return pd.DataFrame()  # 빈 DataFrame 반환
 
 
-def get_nearest_weather_data(place):
+def get_nearest_weather_data(place_name):
+        
+        # 데이터 파일 및 맵 파일 경로 설정
+        file_path = os.path.join(settings.BASE_DIR, 'jeju_olleh', 'modules', 'fin_data_weighted_token.csv')
+        map_path = os.path.join(settings.BASE_DIR, 'jeju_olleh', 'modules', 'map_xy.csv')
 
-    file_path = os.path.join(settings.BASE_DIR, 'jeju_olleh', 'modules', 'fin_data_weighted_token.csv')
-    df = pd.read_csv(file_path, encoding='utf-8')
+        # 데이터 파일 및 맵 파일 로딩
+        df = pd.read_csv(file_path, encoding='utf-8')
+        map_xy = pd.read_csv(map_path, encoding='utf-8')
 
-    map_path = os.path.join(settings.BASE_DIR, 'jeju_olleh', 'modules', 'map_xy.csv')
-    map_xy = pd.read_csv(map_path, encoding='utf-8')
+        # 넘어온 명칭에 해당하는 장소의 위도, 경도값 가져오기
+        target_latitude = df[df['명칭'] == place_name]['위도'].round(2).values[0]
+        target_longitude = df[df['명칭'] == place_name]['경도'].round(2).values[0]
 
-    # 넘어온 위도, 경도값 변수 지정하기
-    target_latitude = df[df['명칭'] == place]['위도'].round(2).iloc[0]  # 수정된 부분
-    target_longitude = df[df['명칭'] == place]['경도'].round(2).iloc[0]  # 수정된 부분
+        # Distance 컬럼이 존재하면 삭제
+        if 'Distance' in map_xy.columns:
+            map_xy.drop('Distance', axis=1, inplace=True)
 
-    # 기존 Distance 컬럼이 존재한다면 삭제
-    if 'Distance' in map_xy.columns:
-        map_xy.drop('Distance', axis=1, inplace=True)
+        # 거리 계산 후 Distance 컬럼 추가
+        map_xy['Distance'] = lat_long_distance(map_xy['위도(초/100)'], map_xy['경도(초/100)'], target_latitude, target_longitude)
 
-    # 해당 위도, 경도값에서 가장 가까운 지점 찾아 xy 뽑기
-    map_xy['Distance'] = map_xy.apply(lambda row: haversine((row['위도(초/100)'], row['경도(초/100)']),
-                                                        (target_latitude, target_longitude), unit=Unit.MILES), axis=1)
+        # 거리순으로 정렬하여 가장 가까운 장소 정보 가져오기
+        sorted_places = map_xy.sort_values(by='Distance')
+        nearest_x, nearest_y = sorted_places.iloc[0][['격자 X', '격자 Y']]
 
-    sorted_places = map_xy.sort_values(by='Distance')
-    nearest_x = sorted_places.iloc[0]['격자 X']
-    nearest_y = sorted_places.iloc[0]['격자 Y']
+        # API 키 설정
+        api_key = '/vkcKfsxxiJPh7yXYaK2eJVJGIyDnYVIwVSbW9erCEVnplIl2x54bxK/ANnlSVB6J9REJ3Cwy8a2Niznv7PbLw==' 
 
-    base_date = datetime.now().strftime('%Y%m%d')
+        # 현재 날짜와 시간 설정
+        base_date = datetime.now().strftime('%Y%m%d')
+        if datetime.now().minute >= 45:
+            base_time = str(datetime.now().hour) + '30'
+        else:
+            base_time = str(datetime.now().hour - 1) + '30'
 
-    # base_time
-    if datetime.now().minute >= 45:
-        base_time = str(datetime.now().hour) + '30'
-    else:
-        base_time = str(datetime.now().hour - 1) + '30'
+        # 날씨 데이터 가져오기
+        weather_data = get_weather_data(api_key, base_date, base_time, nearest_x, nearest_y)
 
-    api_key = ''
+        # 가져온 날씨 정보를 반환
+        return weather_data 
 
+def get_weather_data(api_key, base_date, base_time, nearest_x, nearest_y):
     base_url = 'http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst'
-
+    
     params = {
         'serviceKey': api_key,
-        'numOfRows': '10',
-        'pageNo': '1',
-        'dataType': 'JSON',
+        'numOfRows' : '10',
+        'pageNo' : '1', 
+        'dataType' : 'JSON',
         'base_date': base_date,
-        'base_time': base_time,
-        'nx': nearest_x ,
+        'base_time': base_time, 
+        'nx': nearest_x,
         'ny': nearest_y
     }
 
@@ -144,15 +152,14 @@ def get_nearest_weather_data(place):
     if response.status_code == 200:
         try:
             data = response.json()
-            print(data)  # API 응답 데이터 출력
-            # 여기에서 데이터를 추출하고 필요한 정보를 반환
+
             return data
         except json.JSONDecodeError as e:
             return response.content
+
     else:
         print(f"Error : {response.status_code}")
         data = response.text
-        print(data)  # 에러 응답 데이터 출력
         return data
 
 def get_image_url(destination):

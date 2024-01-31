@@ -36,16 +36,9 @@
         <img src="https://blog.kakaocdn.net/dn/Hh733/btrcA1znbC9/m3cFIkMBMYyJlnHe7WBiN1/img.gif" alt="{{ selected_destination.명칭 }} 이미지">
     {% endif %}
     </div>
-    
-    <div class="destination-info">
-        <p class="destination-description">{{ selected_destination.개요 }}</p>
-        <p class="destination-rating">평점: {{ selected_destination.weighted_평점 }}</p>
-        <!-- 원하는 다른 정보들도 추가할 수 있습니다 -->
-    </div>
 
     <!-- Main Content -->
     <div class="main-content">
-        <h2 class="text-gray-700 font-bold mb-6">{{ selected_destination.명칭 }} 상세 정보</h2>
         <div class="destination-info">
             <p class="destination-description">{{ selected_destination.개요 }}</p>
             <p class="destination-rating">평점: {{ selected_destination.Rating}}</p>

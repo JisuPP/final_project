@@ -1,8 +1,5 @@
-from django.http import HttpResponse
-import datetime, requests, json, os
-from matplotlib import units
+import os
 import pandas as pd
-from math import radians, sin, cos, sqrt, atan2
 from .utils import tokenize_user_input, load_tfidf_matrix, load_tfidf_vectorizer, get_nearest_weather_data, get_address_info, lat_long_distance, get_image_url
 from sklearn.metrics.pairwise import cosine_similarity
 from django.conf import settings
@@ -11,7 +8,6 @@ from django.shortcuts import render
 def rec_input(request):
     
     if request.method == 'POST':
-        
         # user_input 토큰화
         user_input = request.POST['user_input']
         keyword_input = tokenize_user_input(user_input)
@@ -32,8 +28,9 @@ def rec_input(request):
         result_df_tfidf = df.iloc[keyword_input_ind[0, :10]].sort_values('weighted_평점', ascending=False)[:7]
 
         if not result_df_tfidf.empty:
-            # 이미지 URL 추가
-            # result_df_tfidf['selected_image_url'] = result_df_tfidf['명칭'].apply(get_image_url)
+            
+            #이미지 URL 추가
+            result_df_tfidf['selected_image_url'] = result_df_tfidf['명칭'].apply(get_image_url)
 
             # 날씨 정보 추가
             result_df_tfidf['날씨'] = result_df_tfidf.apply(lambda x: get_nearest_weather_data(x['명칭']), axis=1)
