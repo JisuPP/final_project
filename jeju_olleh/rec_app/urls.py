@@ -6,7 +6,8 @@ app_name = 'rec_app'
 
 urlpatterns = [
     path('', views.recommendation_input, name='recommendation_input'),
-    path('rec_result/', views.rec_result, name='rec_result'),
     path('detail/<str:destination>/', views.detail, name='detail'),
     path('about/', views.about, name='about'),
+    path('others/', views.others, name='others'),
+    path('result/', views.recommended_places, name='recommended_places'),  # 여기를 수정
 ]
