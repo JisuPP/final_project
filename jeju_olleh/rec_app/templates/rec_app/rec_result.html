@@ -35,7 +35,7 @@
             <a href="{% url 'rec_app:detail' row.명칭 %}">
                 <div class="destination-info">
                     <h3 class="destination-title">{{ row.명칭 }}</h3>
-                    <p class="weather-info">날씨: {{ row.날씨 }}</p>
+                    <p class="weather-info">현재 날씨: {{ row.날씨 }}</p>
                 </div>
                 {% if row.selected_image_url %}
                     <img src="{{ row.selected_image_url }}" alt="{{ row.명칭 }} 이미지">

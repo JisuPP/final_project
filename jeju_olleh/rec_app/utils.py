@@ -135,14 +135,14 @@ def get_nearest_weather_data(place_name):
 
 def get_weather_data(api_key, base_date, base_time, nearest_x, nearest_y):
     base_url = 'http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst'
-    
+
     params = {
         'serviceKey': api_key,
-        'numOfRows' : '10',
-        'pageNo' : '1', 
-        'dataType' : 'JSON',
+        'numOfRows': '10',
+        'pageNo': '1',
+        'dataType': 'JSON',
         'base_date': base_date,
-        'base_time': base_time, 
+        'base_time': base_time,
         'nx': nearest_x,
         'ny': nearest_y
     }
@@ -153,12 +153,32 @@ def get_weather_data(api_key, base_date, base_time, nearest_x, nearest_y):
         try:
             data = response.json()
 
-            return data
+            # 추가: POP, TMP, WSD 정보 추출
+            weather_info = {}
+            for item in data['response']['body']['items']['item']:
+                category = item['category']
+                fcst_value = item['fcstValue']
+
+                if category == 'POP':
+                    weather_info['POP'] = f'강수확률: {fcst_value}%'
+                elif category == 'TMP':
+                    weather_info['TMP'] = f'현재기온: {fcst_value}°C'
+                elif category == 'WSD':
+                    weather_info['WSD'] = f'풍속: {fcst_value} m/s'
+
+            # 문자열 포맷 조합
+            result_string = (
+                f"{weather_info.get('TMP', '')} "
+                f"{weather_info.get('WSD', '')} "
+                f"{weather_info.get('POP', '')}"
+            )
+
+            # 여기에서 데이터를 추출하고 필요한 정보를 반환
+            return result_string
         except json.JSONDecodeError as e:
             return response.content
-
     else:
-        print(f"Error : {response.status_code}")
+        print(f"Error: {response.status_code}")
         data = response.text
         return data
 
