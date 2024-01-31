@@ -13,6 +13,9 @@ def recommendation_input(request):
     if request.method == 'POST':
         # user_input 토큰화
         user_input = request.POST['user_input']
+        # address_input도 가져오기 
+        address_input = request.POST['address_input']
+
         keyword_input = tokenize_user_input(user_input)
 
         # data 가져오기
@@ -42,7 +45,7 @@ def recommendation_input(request):
 
 def detail(request, destination):
     # 여기에서 destination은 선택한 여행지의 명칭입니다.
-    file_path = os.path.join(settings.BASE_DIR, 'jeju_olleh', 'modules', 'fin_data_weighted_token.csv')
+    file_path = os.path.join(settings.BASE_DIR, 'jeju_olleh', 'modules', 'fin_data_weighted_token_map.csv')
     df = pd.read_csv(file_path, encoding='utf-8')
 
     # '명칭'이라는 열이 있을 경우
@@ -57,6 +60,7 @@ def about(request):
     # About 페이지에 대한 뷰 로직을 작성합니다.
     return render(request, 'rec_app/about.html')
 
+<<<<<<< HEAD
 
 def others(request):
     # other 페이지에 대한 뷰 로직을 작성합니다.
@@ -105,3 +109,8 @@ def recommended_places(request):
 
 
 
+=======
+def map(request):
+    # 관광지 전체 목록 지도로 구성
+    return render(request, 'rec_app/map.html')
+>>>>>>> 5097ea2829a31a1c5cd808b6fd04946aa6fa00d5

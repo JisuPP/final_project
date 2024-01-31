@@ -19,7 +19,12 @@
             <div class="nav-links">
                 <a href="{% url 'rec_app:recommendation_input' %}" class="text-gray-700 hover:text-gray-600">Home</a>
                 <a href= "{% url 'rec_app:about' %}" class="text-gray-700 hover:text-gray-600">About</a>
+<<<<<<< HEAD
                 <a href="{% url 'rec_app:others' %}" class="text-gray-700 hover:text-gray-600">Others..</a>
+=======
+                <a href="{% url 'rec_app:map' %}" class="text-gray-700 hover:text-gray-600">Map</a>
+                <a href="#" class="text-gray-700 hover:text-gray-600">Others..</a>
+>>>>>>> 5097ea2829a31a1c5cd808b6fd04946aa6fa00d5
             </div>
         </div>
     </div>
@@ -33,8 +38,15 @@
         <h2 class="text-gray-700 font-bold mb-6">여행지 추천받기</h2>
         <form method="post" action="{% url 'rec_app:recommendation_input' %}">
             {% csrf_token %}
-            <label for="user_input">당신이 원하는 여행은?:</label>
-            <input type="text" name="user_input" required>
+            <div class="form-group">
+                <label for="user_input">당신이 원하는 여행지는?:</label>
+                <input type="text" name="user_input" required>
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="address_input">현재 주소 혹은 여행 예정 주소지를 입력해주세요:</label>
+                <input type="text" name="address_input" required>
+            </div>
             <button type="submit">추천 받기</button>
         </form>
         
