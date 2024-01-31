@@ -1,7 +1,7 @@
 import datetime, json, os, pickle, requests
 import pandas as pd
 import numpy as np
-from datetime import datetime
+from datetime import datetime, timedelta
 from konlpy.tag import Okt
 from django.conf import settings
 from math import radians, sin, cos, sqrt, atan2
@@ -91,7 +91,6 @@ def get_address_info(address):
         print("Failed to retrieve data from the API.")
         return pd.DataFrame()  # 빈 DataFrame 반환
 
-
 def get_nearest_weather_data(place_name):
         
         # 데이터 파일 및 맵 파일 경로 설정
@@ -122,10 +121,8 @@ def get_nearest_weather_data(place_name):
 
         # 현재 날짜와 시간 설정
         base_date = datetime.now().strftime('%Y%m%d')
-        if datetime.now().minute >= 45:
-            base_time = str(datetime.now().hour) + '30'
-        else:
-            base_time = str(datetime.now().hour - 1) + '30'
+        
+        base_time = calculate_base_time()
 
         # 날씨 데이터 가져오기
         weather_data = get_weather_data(api_key, base_date, base_time, nearest_x, nearest_y)
@@ -133,9 +130,32 @@ def get_nearest_weather_data(place_name):
         # 가져온 날씨 정보를 반환
         return weather_data 
 
-def get_weather_data(api_key, base_date, base_time, nearest_x, nearest_y):
-    base_url = 'http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst'
 
+def calculate_base_time():
+        
+        now = datetime.now()
+
+        current_hour = now.hour
+
+        base_time_options = [2, 5, 8, 11, 14, 17, 20, 23]
+            
+        # 현재 시간에 가장 가까운 base_time 찾기
+        closest_base_time = min(base_time_options, key=lambda x: abs(x - current_hour))
+            
+        # 현재 시간보다 작은 base_time 중 가장 큰 값을 선택
+        base_time = max(filter(lambda x: x <= current_hour, base_time_options))
+
+        return f"{base_time:02d}00"
+        
+def calculate_base_time():
+    now = datetime.now()
+    current_hour = now.hour
+    base_time_options = [2, 5, 8, 11, 14, 17, 20, 23]
+    base_time = max(filter(lambda x: x <= current_hour, base_time_options))
+    return f"{base_time:02d}00"
+
+def get_weather_data(api_key, base_date, base_time, nearest_x, nearest_y):
+    base_url = 'http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtNcst'
     params = {
         'serviceKey': api_key,
         'numOfRows': '10',
@@ -152,35 +172,39 @@ def get_weather_data(api_key, base_date, base_time, nearest_x, nearest_y):
     if response.status_code == 200:
         try:
             data = response.json()
-
-            # 추가: POP, TMP, WSD 정보 추출
             weather_info = {}
-            for item in data['response']['body']['items']['item']:
-                category = item['category']
-                fcst_value = item['fcstValue']
 
-                if category == 'POP':
-                    weather_info['POP'] = f'강수확률: {fcst_value}%'
-                elif category == 'TMP':
-                    weather_info['TMP'] = f'현재기온: {fcst_value}°C'
-                elif category == 'WSD':
-                    weather_info['WSD'] = f'풍속: {fcst_value} m/s'
+            if 'item' in data['response']['body']['items']:
+                items = data['response']['body']['items']['item']
+                for item in items:
+                    category = item['category']
+                    fcst_value = item['obsrValue']
 
-            # 문자열 포맷 조합
-            result_string = (
-                f"{weather_info.get('TMP', '')} "
-                f"{weather_info.get('WSD', '')} "
-                f"{weather_info.get('POP', '')}"
-            )
+                    if category == 'PTY':
+                        weather_info['PTY'] = get_weather_status(fcst_value)
+                    elif category == 'T1H':
+                        weather_info['T1H'] = f'{fcst_value}°C'
+                    elif category == 'WSD':
+                        weather_info['WSD'] = f'{fcst_value} m/s'
 
-            # 여기에서 데이터를 추출하고 필요한 정보를 반환
-            return result_string
+            return weather_info
         except json.JSONDecodeError as e:
-            return response.content
+            raise  # 예외를 그대로 던짐
     else:
-        print(f"Error: {response.status_code}")
-        data = response.text
-        return data
+        response.raise_for_status()  # 예외를 그대로 던짐
+
+def get_weather_status(pty_value):
+    status_mapping = {
+        '0': '맑음',
+        '1': '비',
+        '2': '비/눈',
+        '3': '눈',
+        '5': '빗방울',
+        '6': '빗방울눈날림',
+        '7': '눈날림',
+    }
+    return status_mapping.get(pty_value, '알 수 없음')
+
 
 def get_image_url(destination):
     # food.csv 파일에서 명칭에 해당하는 이미지 URL 가져오기

@@ -35,13 +35,12 @@
             <a href="{% url 'rec_app:detail' row.명칭 %}">
                 <div class="destination-info">
                     <h3 class="destination-title">{{ row.명칭 }}</h3>
-                    <p class="weather-info">현재 날씨: {{ row.날씨 }}</p>
                 </div>
                 {% if row.selected_image_url %}
-                    <img src="{{ row.selected_image_url }}" alt="{{ row.명칭 }} 이미지">
+                <img src="{{ row.selected_image_url }}" alt="{{ row.명칭 }} 이미지">
                 {% else %}
-                    <!-- 이미지가 없는 경우 대체 이미지를 표시 -->
-                    <img src="https://blog.kakaocdn.net/dn/Hh733/btrcA1znbC9/m3cFIkMBMYyJlnHe7WBiN1/img.gif" alt="{{ row.명칭 }} 이미지">
+                <!-- 이미지가 없는 경우 대체 이미지를 표시 -->
+                <img src="https://blog.kakaocdn.net/dn/Hh733/btrcA1znbC9/m3cFIkMBMYyJlnHe7WBiN1/img.gif" alt="{{ row.명칭 }} 이미지">
                 {% endif %} 
             </a>
         </div>

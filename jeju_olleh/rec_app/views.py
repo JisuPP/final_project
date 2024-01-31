@@ -28,12 +28,9 @@ def rec_input(request):
         result_df_tfidf = df.iloc[keyword_input_ind[0, :10]].sort_values('weighted_평점', ascending=False)[:7]
 
         if not result_df_tfidf.empty:
-            
+
             #이미지 URL 추가
             result_df_tfidf['selected_image_url'] = result_df_tfidf['명칭'].apply(get_image_url)
-
-            # 날씨 정보 추가
-            result_df_tfidf['날씨'] = result_df_tfidf.apply(lambda x: get_nearest_weather_data(x['명칭']), axis=1)
 
             # 결과를 HTML로 전달
             return render(request, 'rec_app/rec_result.html', {'result_df': result_df_tfidf})
@@ -42,6 +39,7 @@ def rec_input(request):
     return render(request, 'rec_app/rec_input.html')
 
 def detail(request, destination):
+
     # 여기에서 destination은 선택한 여행지의 명칭입니다.
     file_path = os.path.join(settings.BASE_DIR, 'jeju_olleh', 'modules', 'fin_data_weighted_token_map.csv')
     df = pd.read_csv(file_path, encoding='utf-8')
@@ -52,6 +50,8 @@ def detail(request, destination):
     # 이미지 URL 가져오기
     selected_destination['selected_image_url'] = get_image_url(destination)
 
+    selected_destination['weather_info'] = get_nearest_weather_data(selected_destination['명칭'])
+    
     return render(request, 'rec_app/detail.html', {'selected_destination': selected_destination})
 
 def about(request):

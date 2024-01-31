@@ -2,68 +2,75 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ selected_destination.명칭 }}</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{{ selected_destination.명칭 }}</title>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    </head>
 
-<body>
-    <div class="container">
-        <!-- Navigation Bar -->
-        <div class="nav-bar">
-            <h1>{{ selected_destination.명칭 }}</h1>
+    <body>
+        <div class="container">
+            <!-- Navigation Bar -->
+            <div class="nav-bar">
+                <h1>{{ selected_destination.명칭 }}</h1>
+            </div>
+            <div class="nav-links">
+                <a href="{% url 'rec_app:rec_input' %}" class="text-gray-700 hover:text-gray-600">Home</a>
+                <a href="{% url 'rec_app:map' %}" class="text-gray-700 hover:text-gray-600">Map</a>
+                <a href= "{% url 'rec_app:about' %}" class="text-gray-700 hover:text-gray-600">About</a>
+                <a href="{% url 'rec_app:rec_place' %}" class="text-gray-700 hover:text-gray-600">Others..</a>
+            </div>
         </div>
-        <div class="nav-links">
-            <a href="{% url 'rec_app:rec_input' %}" class="text-gray-700 hover:text-gray-600">Home</a>
-            <a href="{% url 'rec_app:map' %}" class="text-gray-700 hover:text-gray-600">Map</a>
-            <a href= "{% url 'rec_app:about' %}" class="text-gray-700 hover:text-gray-600">About</a>
-            <a href="{% url 'rec_app:rec_place' %}" class="text-gray-700 hover:text-gray-600">Others..</a>
-        </div>
-    </div>
 
-<!-- Main Content -->
-<div class="main-content">
-    <h2 class="text-gray-700 font-bold mb-6">{{ selected_destination.명칭 }} 상세 정보</h2>
-    
-    <div class="destination-image">
-        {% if selected_destination.selected_image_url %}
-        <img src="{{ selected_destination.selected_image_url }}" alt="{{ selected_destination.명칭 }} 이미지">
-    {% else %}
-        <!-- 이미지가 없는 경우 대체 이미지를 표시 -->
-        <img src="https://blog.kakaocdn.net/dn/Hh733/btrcA1znbC9/m3cFIkMBMYyJlnHe7WBiN1/img.gif" alt="{{ selected_destination.명칭 }} 이미지">
-    {% endif %}
-    </div>
+        <!-- Main Content -->
+        <div class="main-content">
+            <h2 class="text-gray-700 font-bold mb-6">{{ selected_destination.명칭 }} 상세 정보</h2>
 
-    <!-- Main Content -->
-    <div class="main-content">
-        <div class="destination-info">
-            <p class="destination-description">{{ selected_destination.개요 }}</p>
-            <p class="destination-rating">평점: {{ selected_destination.Rating}}</p>
-            <p class="destination-reviews">리뷰수: {{ selected_destination.Reviews }}</p>
-            
-            {% comment %} 지도 삽입 {% endcomment %}
-            <iframe srcdoc="{{ selected_destination.map }}" width="100%" height="500px"></iframe>
+            <div class="destination-image">
+                {% if selected_destination.selected_image_url %}
+                <img src="{{ selected_destination.selected_image_url }}" alt="{{ selected_destination.명칭 }} 이미지">
+            {% else %}
+                <!-- 이미지가 없는 경우 대체 이미지를 표시 -->
+                <img src="https://blog.kakaocdn.net/dn/Hh733/btrcA1znbC9/m3cFIkMBMYyJlnHe7WBiN1/img.gif" alt="{{ selected_destination.명칭 }} 이미지">
+            {% endif %}
+            </div>
 
-            <!-- 원하는 다른 정보들도 추가할 수 있습니다 -->
-        </div>
-    </div>
+            <!-- Main Content -->
+            <div class="main-content">
+                <div class="destination-info">
+                    <p class="destination-description">{{ selected_destination.개요 }}</p>
+                    <p class="destination-rating">평점: {{ selected_destination.Rating}}</p>
+                    <p class="destination-reviews">리뷰수: {{ selected_destination.Reviews }}</p>
+                    <p class="destination-weather">현재날씨 : </p>
+                    <ul>
+                        {% if selected_destination.weather_info %}
+                            {% for category, value in selected_destination.weather_info.items %}
+                                <li>{{ category }}: {{ value }}</li>
+                            {% endfor %}
+                        {% else %}
+                            <li>날씨 정보 없음</li>
+                        {% endif %}
+                    </ul>
+                    {% comment %} 지도 삽입 {% endcomment %}
+                    <iframe srcdoc="{{ selected_destination.map }}" width="100%" height="500px"></iframe>
 
-    {% comment %} 리뷰입력창 - url수정필요 {% endcomment %}
-    <div class = "main-content">
-        <form method="post" action="{% url 'rec_app:rec_input' %}">
-            {% csrf_token %}
-            <label for="review_input">해당 여행지에 다녀왔다면 리뷰를 입력해주세요!</label>
-            <textarea name="review_input" rows="5" cols="50" required></textarea>
-            <br>
-            <label for="rating_input">평점을 입력해주세요 (0에서 5까지):</label>
-            <input type="number" name="rating_input" min="0" max="5" step="0.1" required>
-            <br>
-            <button type="submit">입력하기</button>
-        </form>
-    </div>
-</body>
+                </div>
+            </div>
+
+            {% comment %} 리뷰입력창 - url수정필요 {% endcomment %}
+            <div class = "main-content">
+                <form method="post" action="{% url 'rec_app:rec_input' %}">
+                    {% csrf_token %}
+                    <label for="review_input">해당 여행지에 다녀왔다면 리뷰를 입력해주세요!</label>
+                    <textarea name="review_input" rows="5" cols="50" required></textarea>
+                    <br>
+                    <label for="rating_input">평점을 입력해주세요 (0에서 5까지):</label>
+                    <input type="number" name="rating_input" min="0" max="5" step="0.1" required>
+                    <br>
+                    <button type="submit">입력하기</button>
+                </form>
+            </div>
 
 </html>
