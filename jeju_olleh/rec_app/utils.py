@@ -101,8 +101,8 @@ def get_nearest_weather_data(place):
     map_xy = pd.read_csv(map_path, encoding='utf-8')
 
     # 넘어온 위도, 경도값 변수 지정하기
-    target_latitude = df[df['명칭'] == place]['위도'].round(2) 
-    target_longitude = df[df['명칭'] == place]['경도'].round(2)
+    target_latitude = df[df['명칭'] == place]['위도'].round(2).iloc[0]  # 수정된 부분
+    target_longitude = df[df['명칭'] == place]['경도'].round(2).iloc[0]  # 수정된 부분
 
     # 기존 Distance 컬럼이 존재한다면 삭제
     if 'Distance' in map_xy.columns:
@@ -116,10 +116,13 @@ def get_nearest_weather_data(place):
     nearest_x = sorted_places.iloc[0]['격자 X']
     nearest_y = sorted_places.iloc[0]['격자 Y']
 
-    # params
-    api_key = 'vpA5w%2Frqnqv5OVUvdS1jzdjrdM3lN%2B3Omjbnx64dXdMBMpL7xbLreYIFaigNiexQelZHSsPNMGL3A91tHKF1YQ%3D%3D'  # 발급받은 API 키 입력
+    # 수정된 부분: get_weather_data 함수 호출
+    return get_weather_data(nearest_x, nearest_y)
 
-    base_date = datetime.now().strftime('%Y%m%d')  # 받아서 넘겨야하는 것들
+
+def get_weather_data(nx, ny):
+
+    base_date = datetime.now().strftime('%Y%m%d')
 
     # base_time
     if datetime.now().minute >= 45:
@@ -127,11 +130,7 @@ def get_nearest_weather_data(place):
     else:
         base_time = str(datetime.now().hour - 1) + '30'
 
-    # 수정된 부분: get_weather_data 함수 호출
-    return get_weather_data(api_key, base_date, base_time, nearest_x, nearest_y)
-
-
-def get_weather_data(api_key, base_date, base_time, nx, ny):
+    api_key = 'vpA5w/rqnqv5OVUvdS1jzdjrdM3lN+3Omjbnx64dXdMBMpL7xbLreYIFaigNiexQelZHSsPNMGL3A91tHKF1YQ=='
 
     base_url = 'http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst'
 

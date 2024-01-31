@@ -8,14 +8,12 @@ from sklearn.metrics.pairwise import cosine_similarity
 from django.conf import settings
 from django.shortcuts import render
 
-def recommendation_input(request):
+def rec_input(request):
     
     if request.method == 'POST':
+        
         # user_input 토큰화
         user_input = request.POST['user_input']
-        # address_input도 가져오기 
-        address_input = request.POST['address_input']
-
         keyword_input = tokenize_user_input(user_input)
 
         # data 가져오기
@@ -37,11 +35,14 @@ def recommendation_input(request):
             # 이미지 URL 추가
             result_df_tfidf['selected_image_url'] = result_df_tfidf['명칭'].apply(get_image_url)
 
+            # 날씨 정보 추가
+            result_df_tfidf['날씨'] = result_df_tfidf['명칭'].apply(get_nearest_weather_data)
+
             # 결과를 HTML로 전달
             return render(request, 'rec_app/rec_result.html', {'result_df': result_df_tfidf})
     
     # GET 요청에 대한 처리를 추가
-    return render(request, 'rec_app/recommendation_input.html')
+    return render(request, 'rec_app/rec_input.html')
 
 def detail(request, destination):
     # 여기에서 destination은 선택한 여행지의 명칭입니다.
@@ -60,14 +61,12 @@ def about(request):
     # About 페이지에 대한 뷰 로직을 작성합니다.
     return render(request, 'rec_app/about.html')
 
-<<<<<<< HEAD
-
-def others(request):
-    # other 페이지에 대한 뷰 로직을 작성합니다.
-    return render(request, 'rec_app/others.html')
+def place_rec(request):
+    # place_rec 페이지에 대한 뷰 로직을 작성합니다.
+    return render(request, 'rec_app/place_rec.html')
 
 
-def recommended_places(request):
+def rec_place(request):
     if request.method == 'POST':
         # 사용자가 입력한 정보 가져오기
         user_input = request.POST.get('user_input')
@@ -103,14 +102,10 @@ def recommended_places(request):
             recommended_places = filtered_df.head(5)
 
             # 결과를 HTML로 전달
-            return render(request, 'rec_app/result.html', {'result_df': recommended_places})
+            return render(request, 'rec_app/place_result.html', {'result_df': recommended_places})
 
-    return render(request, 'rec_app/.html')
+    return render(request, 'rec_app/place_rec.html')
 
-
-
-=======
 def map(request):
     # 관광지 전체 목록 지도로 구성
     return render(request, 'rec_app/map.html')
->>>>>>> 5097ea2829a31a1c5cd808b6fd04946aa6fa00d5

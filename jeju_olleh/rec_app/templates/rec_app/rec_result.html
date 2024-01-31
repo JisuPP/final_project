@@ -17,10 +17,10 @@
             <h1>제주에서 어디올레?</h1>
         </div>
         <div class="nav-links">
-            <a href="{% url 'rec_app:recommendation_input' %}" class="text-gray-700 hover:text-gray-600">Home</a>
+            <a href="{% url 'rec_app:rec_input' %}" class="text-gray-700 hover:text-gray-600">Home</a>
             <a href="{% url 'rec_app:map' %}" class="text-gray-700 hover:text-gray-600">Map</a>
             <a href= "{% url 'rec_app:about' %}" class="text-gray-700 hover:text-gray-600">About</a>
-            <a href="{% url 'rec_app:others' %}" class="text-gray-700 hover:text-gray-600">Others..</a>
+            <a href="{% url 'rec_app:rec_place' %}" class="text-gray-700 hover:text-gray-600">Others..</a>
         </div>
     </div>
 
@@ -30,25 +30,25 @@
     <h2>추천 결과</h2>
     <div class="grid">
         {% for index, row in result_df.iterrows %}
-            <!-- Destination Card -->
-            <div class="destination-card">
-                <a href="{% url 'rec_app:detail' row.명칭 %}">
-                    <div class="destination-info">
-                        <h3 class="destination-title">{{ row.명칭 }}</h3>
-                    </div>
-                </a>
-                    {% if row.selected_image_url %}
-                        <img src="{{ row.selected_image_url }}" alt="{{ row.명칭 }} 이미지">
-                    {% else %}
-                        <!-- 이미지가 없는 경우 대체 이미지를 표시 -->
-                        <img src="https://blog.kakaocdn.net/dn/Hh733/btrcA1znbC9/m3cFIkMBMYyJlnHe7WBiN1/img.gif" alt="{{ row.명칭 }} 이미지">
-                    {% endif %} 
-            </div>
+        <!-- Destination Card -->
+        <div class="destination-card">
+            <a href="{% url 'rec_app:detail' row.명칭 %}">
+                <div class="destination-info">
+                    <h3 class="destination-title">{{ row.명칭 }}</h3>
+                    <p class="weather-info">날씨: {{ row.날씨 }}</p>
+                </div>
+                {% if row.selected_image_url %}
+                    <img src="{{ row.selected_image_url }}" alt="{{ row.명칭 }} 이미지">
+                {% else %}
+                    <!-- 이미지가 없는 경우 대체 이미지를 표시 -->
+                    <img src="https://blog.kakaocdn.net/dn/Hh733/btrcA1znbC9/m3cFIkMBMYyJlnHe7WBiN1/img.gif" alt="{{ row.명칭 }} 이미지">
+                {% endif %} 
+            </a>
+        </div>
         {% endfor %}
     </div>
     {% else %}
         <p>추천 결과가 없습니다.</p>
     {% endif %}
-
 </body>
 </html>
