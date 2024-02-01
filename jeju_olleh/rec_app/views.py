@@ -13,7 +13,7 @@ def rec_input(request):
         keyword_input = tokenize_user_input(user_input)
 
         # data 가져오기
-        file_path = os.path.join(settings.BASE_DIR, 'jeju_olleh', 'modules', 'fin_data_weighted_token.csv')
+        file_path = os.path.join(settings.BASE_DIR, 'jeju_olleh', 'modules', 'fin_token.csv')
         df = pd.read_csv(file_path, encoding='utf-8')
 
         # TF-IDF matrix, vect 가져오기
@@ -25,12 +25,12 @@ def rec_input(request):
         keyword_input_ind = keyword_input_sim.argsort()[:, ::-1]
 
         # 결과 DataFrame 생성
-        result_df_tfidf = df.iloc[keyword_input_ind[0, :10]].sort_values('weighted_평점', ascending=False)[:7]
+        result_df_tfidf = df.iloc[keyword_input_ind[0, :10]].sort_values('Rating', ascending=False)[:7]
 
         if not result_df_tfidf.empty:
 
             #이미지 URL 추가
-            result_df_tfidf['selected_image_url'] = result_df_tfidf['명칭'].apply(get_image_url)
+            result_df_tfidf['selected_image_url'] = result_df_tfidf['title'].apply(get_image_url)
 
             # 결과를 HTML로 전달
             return render(request, 'rec_app/rec_result.html', {'result_df': result_df_tfidf})
@@ -41,16 +41,16 @@ def rec_input(request):
 def detail(request, destination):
 
     # 여기에서 destination은 선택한 여행지의 명칭입니다.
-    file_path = os.path.join(settings.BASE_DIR, 'jeju_olleh', 'modules', 'fin_data_weighted_token_map.csv')
+    file_path = os.path.join(settings.BASE_DIR, 'jeju_olleh', 'modules', 'fin_token.csv')
     df = pd.read_csv(file_path, encoding='utf-8')
 
     # '명칭'이라는 열이 있을 경우
-    selected_destination = df[df['명칭'] == destination].iloc[0]
+    selected_destination = df[df['title'] == destination].iloc[0]
 
     # 이미지 URL 가져오기
     selected_destination['selected_image_url'] = get_image_url(destination)
 
-    selected_destination['weather_info'] = get_nearest_weather_data(selected_destination['명칭'])
+    selected_destination['weather_info'] = get_nearest_weather_data(selected_destination['title'])
     
     return render(request, 'rec_app/detail.html', {'selected_destination': selected_destination})
 
@@ -76,7 +76,7 @@ def rec_place(request):
             user_longitude = user_coordinates['Longitude'].iloc[0]
 
             # 데이터 가져오기
-            file_path = os.path.join(settings.BASE_DIR, 'jeju_olleh', 'modules', 'fin_data_weighted_token.csv')
+            file_path = os.path.join(settings.BASE_DIR, 'jeju_olleh', 'modules', 'fin_token.csv')
             df = pd.read_csv(file_path, encoding='utf-8')
 
             # TF-IDF matrix, vectorizer 가져오기
@@ -93,7 +93,7 @@ def rec_place(request):
             result_df = df.iloc[keyword_input_ind[0]]  # 수정된 부분
 
             # 15km 이내의 장소 필터링
-            filtered_df = result_df[result_df.apply(lambda x: lat_long_distance(x['위도'], x['경도'], user_latitude, user_longitude) <= 15, axis=1)]
+            filtered_df = result_df[result_df.apply(lambda x: lat_long_distance(x['mapx'], x['mapy'], user_latitude, user_longitude) <= 15, axis=1)]
 
             recommended_places = filtered_df.head(5)
 

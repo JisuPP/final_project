@@ -111,7 +111,7 @@ def get_address_info(address):
 def get_nearest_weather_data(place_name):
         
         # 데이터 파일 및 맵 파일 경로 설정 -> 추후에 final 파일로 변경 예정
-        file_path = os.path.join(settings.BASE_DIR, 'jeju_olleh', 'modules', 'fin_data_weighted_token.csv')
+        file_path = os.path.join(settings.BASE_DIR, 'jeju_olleh', 'modules', 'fin_token.csv')
         map_path = os.path.join(settings.BASE_DIR, 'jeju_olleh', 'modules', 'map_xy.csv')
 
         # 데이터 파일 및 맵 파일 로딩
@@ -119,8 +119,8 @@ def get_nearest_weather_data(place_name):
         map_xy = pd.read_csv(map_path, encoding='utf-8')
 
         # 넘어온 명칭에 해당하는 장소의 위도, 경도값 가져오기
-        target_latitude = df[df['명칭'] == place_name]['위도'].round(2).values[0]
-        target_longitude = df[df['명칭'] == place_name]['경도'].round(2).values[0]
+        target_latitude = df[df['title'] == place_name]['mapx'].round(2).values[0]
+        target_longitude = df[df['title'] == place_name]['mapy'].round(2).values[0]
 
         # Distance 컬럼이 존재하면 삭제
         if 'Distance' in map_xy.columns:
@@ -221,11 +221,11 @@ def get_weather_status(pty_value):
 # 이미지 가져오기
 def get_image_url(destination):
     # food.csv 파일에서 명칭에 해당하는 이미지 URL 가져오기 -> 추후에 final 파일로 변경 예정
-    food_file_path = os.path.join(settings.BASE_DIR, 'jeju_olleh', 'modules', 'food.csv')
-    food_df = pd.read_csv(food_file_path, encoding='utf-8')
+    file_path = os.path.join(settings.BASE_DIR, 'jeju_olleh', 'modules', 'fin_token.csv')
+    df = pd.read_csv(file_path, encoding='utf-8')
     
     # 명칭에 해당하는 여행지의 이미지 URL 가져오기
-    selected_image_url = food_df[food_df['title'] == destination]['firstimage'].iloc[0] if not food_df[food_df['title'] == destination].empty else None
+    selected_image_url = df[df['title'] == destination]['firstimage'].iloc[0] if not df[df['title'] == destination].empty else None
     
     return selected_image_url
 

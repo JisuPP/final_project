@@ -3,10 +3,10 @@
 {% block content %}
 
         <div class="main-content">
-            <h2 class="detail-content">{{ selected_destination.명칭 }} 상세 정보</h2>
+            <h2 class="detail-content">{{ selected_destination.title }} 상세 정보</h2>
             <div class="destination-image">
                 {% if selected_destination.selected_image_url %}
-                <img src="{{ selected_destination.selected_image_url }}" alt="{{ selected_destination.명칭 }} 이미지">
+                <img src="{{ selected_destination.selected_image_url }}" alt="{{ selected_destination.title }} 이미지">
             {% else %}
                 <!-- 이미지가 없는 경우 대체 이미지를 표시 -->
                 <img src="https://blog.kakaocdn.net/dn/Hh733/btrcA1znbC9/m3cFIkMBMYyJlnHe7WBiN1/img.gif" alt="{{ selected_destination.명칭 }} 이미지">
@@ -16,7 +16,7 @@
             <!-- Main Content -->
             <div class="main-content">
                 <div class="destination-info">
-                    <p class="destination-description">{{ selected_destination.개요 }}</p>
+                    <p class="destination-description">{{ selected_destination.overview_prep }}</p>
                     <p class="destination-rating">평점: {{ selected_destination.Rating}}</p>
                     <p class="destination-reviews">리뷰수: {{ selected_destination.Reviews }}</p>
                     <p class="destination-weather">현재날씨  </p>
