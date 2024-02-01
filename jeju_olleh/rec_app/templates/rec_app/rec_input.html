@@ -1,48 +1,21 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'base.html' %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>제주에서 어디올레?</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-</head>
-
-<body>
-    <div class="container">
-        <!-- Navigation Bar -->
-        <div class="nav-bar">
-            <h1>제주에서 어디올레?</h1>
+{% block content %}
+<!-- user input 부분 -->
+<div class="main-content">
+    <h2 class="rec_input">여행지 추천받기</h2>
+    <form method="post" action="{% url 'rec_app:rec_input' %}">
+        {% csrf_token %}
+        <div class="user-input">
+            <label for="user_input">당신이 원하는 여행지는?</label>
+            <input type="text" name="user_input" required>
+            <button type="submit">추천 받기</button>
         </div>
-            <div class="nav-links">
-                <a href="{% url 'rec_app:rec_input' %}" class="text-gray-700 hover:text-gray-600">Home</a>
-                <a href="{% url 'rec_app:map' %}" class="text-gray-700 hover:text-gray-600">Map</a>
-                <a href= "{% url 'rec_app:about' %}" class="text-gray-700 hover:text-gray-600">About</a>
-                <a href="{% url 'rec_app:rec_place' %}" class="text-gray-700 hover:text-gray-600">Others..</a>
-            </div>
-        </div>
-    </div>
+    </form>
+</div>
 
-        {% comment %} <img src="{% static '/images/jeju.png' %}" alt="Background Image" class="background-image"> {% endcomment %}
-
-</body>
-
-    <!-- Main Content -->
-    <div class="main-content">
-        <h2 class="text-gray-700 font-bold mb-6">여행지 추천받기</h2>
-        <form method="post" action="{% url 'rec_app:rec_input' %}">
-            {% csrf_token %}
-            <div class="form-group">
-                <label for="user_input">당신이 원하는 여행지는?</label>
-                <input type="text" name="user_input" required>
-                <button type="submit">추천 받기</button>
-            </form>
-        </div>
-    </div>
-
-    {% if result_df %}
+{% if result_df %}
+    <div class="recommendation-results">
         <h2>추천 결과</h2>
         <table border="1">
             <tr>
@@ -60,6 +33,7 @@
                 </tr>
             {% endfor %}
         </table>
-    {% endif %}
+    </div>
+{% endif %}
 
-</html>
+{% endblock %}

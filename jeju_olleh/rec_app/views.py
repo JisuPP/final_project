@@ -58,10 +58,9 @@ def about(request):
     # About 페이지에 대한 뷰 로직을 작성합니다.
     return render(request, 'rec_app/about.html')
 
-def place_rec(request):
+def other_rec(request):
     # place_rec 페이지에 대한 뷰 로직을 작성합니다.
-    return render(request, 'rec_app/place_rec.html')
-
+    return render(request, 'rec_app/other_rec.html')
 
 def rec_place(request):
     if request.method == 'POST':
@@ -99,9 +98,9 @@ def rec_place(request):
             recommended_places = filtered_df.head(5)
 
             # 결과를 HTML로 전달
-            return render(request, 'rec_app/place_result.html', {'result_df': recommended_places})
+            return render(request, 'rec_app/other_result.html', {'result_df': recommended_places})
 
-    return render(request, 'rec_app/place_rec.html')
+    return render(request, 'rec_app/other_rec.html')
 
 def map(request):
     # 관광지 전체 목록 지도로 구성

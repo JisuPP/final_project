@@ -1,17 +1,15 @@
 import datetime, json, os, pickle, requests
 import pandas as pd
 import numpy as np
-from datetime import datetime, timedelta
+from datetime import datetime
 from konlpy.tag import Okt
 from django.conf import settings
 from math import radians, sin, cos, sqrt, atan2
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
 
 def tokenize_user_input(user_input):
     okt = Okt()
     # 불용어 설정
-    stopwords_path = os.path.join(settings.BASE_DIR, 'jeju_olleh', 'modules', 'ko-stopwords.csv')  # 파일 경로 수정
+    stopwords_path = os.path.join(settings.BASE_DIR, 'jeju_olleh', 'modules', 'ko-stopwords.csv')
     stopwords = pd.read_csv(stopwords_path)
     stopwords = list(stopwords['stopwords'])
     stopwords += [
@@ -26,41 +24,53 @@ def tokenize_user_input(user_input):
     ]
     stopwords = set(stopwords)
     pos_words = okt.pos(user_input, stem=True, norm=True)
+
     # 형태소 분석 및 불용어 제거
     tokens = [word for word, tag in pos_words if tag in ['Noun', 'Adjective'] and word not in stopwords]
     return tokens
 
-def load_tfidf_matrix(filename='tfidf_matrix.pkl'):  # 파일 경로 수정
-    file_path = os.path.join(settings.BASE_DIR,  'jeju_olleh','modules', 'tfidf_matrix.pkl')
+# matrix 불러오기
+def load_tfidf_matrix(filename='tfidf_matrix.pkl'):
+    file_path = os.path.join(settings.BASE_DIR,  'jeju_olleh','modules', filename)
     tfidf_mat = pd.read_pickle(file_path)
     return tfidf_mat
 
+# vectorizer 불러오기
 def load_tfidf_vectorizer(filename='tfidf_vectorizer.pkl'):
     file_path = os.path.join(settings.BASE_DIR, 'jeju_olleh', 'modules', filename)
     tfidf_vect= pd.read_pickle(file_path)
     return tfidf_vect
 
+# 두 지점 간의 Haversine 거리를 계산합니다. 
 def lat_long_distance(lat1, lon1, lat2, lon2):
-    # 두 지점 간의 Haversine 거리를 계산합니다.
+    
     # 지구의 반지름 (단위: km)
     R = 6371.0
+
     # 라디안으로 변환
     lat1 = np.radians(lat1)  # 여기서 np.radians 사용
     lon1 = np.radians(lon1)
     lat2 = np.radians(lat2)
     lon2 = np.radians(lon2)
+    
     # 위도와 경도의 차이 계산
     dlon = lon2 - lon1
     dlat = lat2 - lat1
+    
     # Haversine 공식 계산
     a = np.sin(dlat / 2)**2 + np.cos(lat1) * np.cos(lat2) * np.sin(dlon / 2)**2
     c = 2 * np.arctan2(np.sqrt(a), np.sqrt(1 - a))
+    
     # 거리 계산
     distance = R * c
+    
     return distance
 
 def get_address_info(address):
+
+    # 주소를 가져오기 위한 url
     apiurl = "https://api.vworld.kr/req/address?"
+
     params = {
         "service": "address",
         "request": "getcoord",
@@ -71,19 +81,25 @@ def get_address_info(address):
         "key": "054C4365-485B-35C4-9219-1C30E6B61D7C"
     }
     response = requests.get(apiurl, params=params)
+
     if response.status_code == 200:
+
         data = response.json()
+
         if 'response' in data and 'refined' in data['response'] and 'text' in data['response']['refined']:
             address = data['response']['refined']['text']
             latitude = float(data['response']['result']['point']['y'])
             longitude = float(data['response']['result']['point']['x'])
+            
             # DataFrame 생성
             df = pd.DataFrame({
                 'Address': [address],
                 'Latitude': [latitude],
                 'Longitude': [longitude]
             })
+
             return df
+        
         else:
             print("Failed to retrieve data from the API.")
             return pd.DataFrame()  # 빈 DataFrame 반환
@@ -91,9 +107,10 @@ def get_address_info(address):
         print("Failed to retrieve data from the API.")
         return pd.DataFrame()  # 빈 DataFrame 반환
 
+# 주변 날씨 정보 가져오기
 def get_nearest_weather_data(place_name):
         
-        # 데이터 파일 및 맵 파일 경로 설정
+        # 데이터 파일 및 맵 파일 경로 설정 -> 추후에 final 파일로 변경 예정
         file_path = os.path.join(settings.BASE_DIR, 'jeju_olleh', 'modules', 'fin_data_weighted_token.csv')
         map_path = os.path.join(settings.BASE_DIR, 'jeju_olleh', 'modules', 'map_xy.csv')
 
@@ -122,7 +139,13 @@ def get_nearest_weather_data(place_name):
         # 현재 날짜와 시간 설정
         base_date = datetime.now().strftime('%Y%m%d')
         
-        base_time = calculate_base_time()
+        if datetime.now().minute >= 40:
+            base_time = f"{datetime.now().hour:02d}30"
+        else:
+            if datetime.now().hour >= 11:
+                base_time = f"{datetime.now().hour - 1:02d}30"
+            else:
+                base_time = f"0{datetime.now().hour - 1:02d}30"
 
         # 날씨 데이터 가져오기
         weather_data = get_weather_data(api_key, base_date, base_time, nearest_x, nearest_y)
@@ -130,32 +153,12 @@ def get_nearest_weather_data(place_name):
         # 가져온 날씨 정보를 반환
         return weather_data 
 
-
-def calculate_base_time():
-        
-        now = datetime.now()
-
-        current_hour = now.hour
-
-        base_time_options = [2, 5, 8, 11, 14, 17, 20, 23]
-            
-        # 현재 시간에 가장 가까운 base_time 찾기
-        closest_base_time = min(base_time_options, key=lambda x: abs(x - current_hour))
-            
-        # 현재 시간보다 작은 base_time 중 가장 큰 값을 선택
-        base_time = max(filter(lambda x: x <= current_hour, base_time_options))
-
-        return f"{base_time:02d}00"
-        
-def calculate_base_time():
-    now = datetime.now()
-    current_hour = now.hour
-    base_time_options = [2, 5, 8, 11, 14, 17, 20, 23]
-    base_time = max(filter(lambda x: x <= current_hour, base_time_options))
-    return f"{base_time:02d}00"
-
+# 날씨 정보
 def get_weather_data(api_key, base_date, base_time, nearest_x, nearest_y):
-    base_url = 'http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtNcst'
+    
+    # 초단기실황조회 url에서 정보를 가져옴
+    base_url = 'http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtNcst' 
+
     params = {
         'serviceKey': api_key,
         'numOfRows': '10',
@@ -166,33 +169,43 @@ def get_weather_data(api_key, base_date, base_time, nearest_x, nearest_y):
         'nx': nearest_x,
         'ny': nearest_y
     }
-
+    
     response = requests.get(base_url, params=params)
-
+    
     if response.status_code == 200:
         try:
             data = response.json()
-            weather_info = {}
+            weather_info_list = []
+            # print("API Response:", data)
 
             if 'item' in data['response']['body']['items']:
                 items = data['response']['body']['items']['item']
                 for item in items:
+                    weather_info = {}
                     category = item['category']
                     fcst_value = item['obsrValue']
 
                     if category == 'PTY':
-                        weather_info['PTY'] = get_weather_status(fcst_value)
+                        weather_info['날씨 상태'] = get_weather_status(fcst_value)
                     elif category == 'T1H':
-                        weather_info['T1H'] = f'{fcst_value}°C'
+                        weather_info['현재 기온'] = f'{fcst_value}°C'
                     elif category == 'WSD':
-                        weather_info['WSD'] = f'{fcst_value} m/s'
+                        weather_info['풍속'] = f'{fcst_value} m/s'
 
-            return weather_info
+                    weather_info_list.append(weather_info)
+
+            if not weather_info_list:  # 날씨 정보가 비어 있다면
+                print("No weather information available.")
+                return None  # None 반환
+
+            return weather_info_list
         except json.JSONDecodeError as e:
-            raise  # 예외를 그대로 던짐
+            print(f"Error decoding JSON response: {e}")
+            return None  # None 반환
     else:
-        response.raise_for_status()  # 예외를 그대로 던짐
+        response.raise_for_status()
 
+# 날씨 상태
 def get_weather_status(pty_value):
     status_mapping = {
         '0': '맑음',
@@ -205,9 +218,9 @@ def get_weather_status(pty_value):
     }
     return status_mapping.get(pty_value, '알 수 없음')
 
-
+# 이미지 가져오기
 def get_image_url(destination):
-    # food.csv 파일에서 명칭에 해당하는 이미지 URL 가져오기
+    # food.csv 파일에서 명칭에 해당하는 이미지 URL 가져오기 -> 추후에 final 파일로 변경 예정
     food_file_path = os.path.join(settings.BASE_DIR, 'jeju_olleh', 'modules', 'food.csv')
     food_df = pd.read_csv(food_file_path, encoding='utf-8')
     
@@ -215,3 +228,57 @@ def get_image_url(destination):
     selected_image_url = food_df[food_df['title'] == destination]['firstimage'].iloc[0] if not food_df[food_df['title'] == destination].empty else None
     
     return selected_image_url
+
+
+# # 날씨 api 가져오기 
+# def get_weather_data(df, map_xy, place):# df : 장소목록 DF, map_xy : 위경도를 xy좌표로 변환하는 DF
+#     base_url = 'http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtFcst'
+#     base_date = datetime.now().strftime('%Y%m%d')  # 받아서 넘겨야하는 것들 
+    
+#     # base_time
+#     if datetime.now().minute >= 45:
+#         base_time = str(datetime.now().strftime('%H')) + '30'
+#     else:
+#         if datetime.now().hour >= 11:
+#             base_time = str(datetime.now().hour - 1)+'30'
+#         else:
+#             base_time = '0' + str(datetime.now().hour - 1)+'30'
+    
+#     # xy 좌표 
+#     def get_nearest_xy(df, map_xy, place): # df : 장소목록 DF, map_xy : 위경도를 xy좌표로 변환하는 DF
+#         target_latitude = df[df['title'] == place]['mapy'].values[0].round(2)
+#         target_longitude = df[df['title'] == place]['mapx'].values[0].round(2)
+#         map_xy['Distance'] = map_xy.apply(lambda row : haversine((row['위도(초/100)'],row['경도(초/100)']), 
+#                                                              (target_latitude,target_longitude), unit=Unit.MILES), axis=1)
+#         sorted_places = map_xy.sort_values(by='Distance')
+#         nearest_x = sorted_places.iloc[0]['격자 X']
+#         nearest_y = sorted_places.iloc[0]['격자 Y']
+#         return [nearest_x, nearest_y]
+#     x = get_nearest_xy(df, map_xy, place)[0]
+#     y = get_nearest_xy(df, map_xy, place)[1]
+    
+#     params = {
+#         'serviceKey': api_key,
+#         'numOfRows' : '10',
+#         'pageNo' : '1', 
+#         'dataType' : 'JSON',
+#         'base_date': base_date,
+#         'base_time': base_time, 
+#         'nx': str(x),
+#         'ny': str(y)
+
+#     }
+#     response = requests.get(base_url, params=params)
+
+#     if response.status_code == 200:
+#         try:
+#             data = response.json()
+#         # 여기에서 데이터를 추출하고 필요한 정보를 반환
+#             return data
+#         except json.JSONDecodeError as e:
+#             return response.content
+
+#     else:
+#         print(f"Error : {response.status_code}")
+#         data = response.text
+#         return data

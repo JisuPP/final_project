@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <!-- Main Content -->
+    <div class="main-content">
+        <h2 class="rec_input">여행지 추천받기</h2>
+        <form method="post" action="{% url 'rec_app:rec_place' %}">
+            {% csrf_token %}
+            <div class="user_location">
+                <label for="user_input">당신이 원하는 여행지는?:</label>
+                <input type="text" name="user_input" required>
+            </div>
+            <br>
+            <div class="user_address">
+                <label for="address_input">현재 주소 혹은 여행 예정 주소지를 입력해주세요:</label>
+                <input type="text" name="address_input" required>
+            </div>
+            <button type="submit">추천 받기</button>
+        </form>
+    </div>
+{% endblock %}
+

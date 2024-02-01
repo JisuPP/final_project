@@ -1,33 +1,9 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'base.html' %}
 
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>{{ selected_destination.명칭 }}</title>
-        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-    </head>
+{% block content %}
 
-    <body>
-        <div class="container">
-            <!-- Navigation Bar -->
-            <div class="nav-bar">
-                <h1>{{ selected_destination.명칭 }}</h1>
-            </div>
-            <div class="nav-links">
-                <a href="{% url 'rec_app:rec_input' %}" class="text-gray-700 hover:text-gray-600">Home</a>
-                <a href="{% url 'rec_app:map' %}" class="text-gray-700 hover:text-gray-600">Map</a>
-                <a href= "{% url 'rec_app:about' %}" class="text-gray-700 hover:text-gray-600">About</a>
-                <a href="{% url 'rec_app:rec_place' %}" class="text-gray-700 hover:text-gray-600">Others..</a>
-            </div>
-        </div>
-
-        <!-- Main Content -->
         <div class="main-content">
-            <h2 class="text-gray-700 font-bold mb-6">{{ selected_destination.명칭 }} 상세 정보</h2>
-
+            <h2 class="detail-content">{{ selected_destination.명칭 }} 상세 정보</h2>
             <div class="destination-image">
                 {% if selected_destination.selected_image_url %}
                 <img src="{{ selected_destination.selected_image_url }}" alt="{{ selected_destination.명칭 }} 이미지">
@@ -43,19 +19,19 @@
                     <p class="destination-description">{{ selected_destination.개요 }}</p>
                     <p class="destination-rating">평점: {{ selected_destination.Rating}}</p>
                     <p class="destination-reviews">리뷰수: {{ selected_destination.Reviews }}</p>
-                    <p class="destination-weather">현재날씨 : </p>
+                    <p class="destination-weather">현재날씨  </p>
                     <ul>
-                        {% if selected_destination.weather_info %}
-                            {% for category, value in selected_destination.weather_info.items %}
+                        {% if selected_destination.weather_info is not none %}
+                        {% for weather_info in selected_destination.weather_info %}
+                            {% for category, value in weather_info.items %}
                                 <li>{{ category }}: {{ value }}</li>
                             {% endfor %}
-                        {% else %}
-                            <li>날씨 정보 없음</li>
-                        {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        <li>날씨 정보 없음</li>
+                    {% endif %}
                     </ul>
-                    {% comment %} 지도 삽입 {% endcomment %}
                     <iframe srcdoc="{{ selected_destination.map }}" width="100%" height="500px"></iframe>
-
                 </div>
             </div>
 
@@ -72,5 +48,6 @@
                     <button type="submit">입력하기</button>
                 </form>
             </div>
+            
+{% endblock %}
 
-</html>

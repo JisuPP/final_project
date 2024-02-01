@@ -1,29 +1,6 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'base.html' %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ selected_destination.명칭 }}</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-</head>
-
-<body>
-    <div class="container">
-        <!-- Navigation Bar -->
-        <div class="nav-bar">
-            <h1>제주에서 어디올레?</h1>
-        </div>
-        <div class="nav-links">
-            <a href="{% url 'rec_app:rec_input' %}" class="text-gray-700 hover:text-gray-600">Home</a>
-            <a href="{% url 'rec_app:map' %}" class="text-gray-700 hover:text-gray-600">Map</a>
-            <a href= "{% url 'rec_app:about' %}" class="text-gray-700 hover:text-gray-600">About</a>
-            <a href="{% url 'rec_app:rec_place' %}" class="text-gray-700 hover:text-gray-600">Others..</a>
-        </div>
-    </div>
-
+{% block content %}
     <!-- Content section-->
     <section class="main-content">
             <div>
@@ -58,3 +35,4 @@
         </div>
     </section>
 </body>
+{% endblock %}
