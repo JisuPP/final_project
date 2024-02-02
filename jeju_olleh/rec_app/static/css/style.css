@@ -488,7 +488,7 @@ progress {
 
 .img-fluid {
   max-width: 100%;
-  height: auto; }
+  max-height: 100%; }
 
 .img-thumbnail {
   padding: 0.25rem;
@@ -522,25 +522,55 @@ progress {
   margin-right: auto;
   margin-left: auto; }
 
+/* 576px 이상 */
 @media (min-width: 576px) {
-  .container, .container-sm {
-    max-width: 540px; } }
+  .container,
+  .container-sm {
+    max-width: 600px; /* 수정: 540px에서 600px로 변경 */
+  }
+}
 
+/* 768px 이상 */
 @media (min-width: 768px) {
-  .container, .container-sm, .container-md {
-    max-width: 720px; } }
+  .container,
+  .container-sm,
+  .container-md {
+    max-width: 800px; /* 수정: 720px에서 800px로 변경 */
+  }
+}
 
+/* 992px 이상 */
 @media (min-width: 992px) {
-  .container, .container-sm, .container-md, .container-lg {
-    max-width: 960px; } }
+  .container,
+  .container-sm,
+  .container-md,
+  .container-lg {
+    max-width: 1080px; /* 수정: 960px에서 1080px로 변경 */
+  }
+}
 
+/* 1200px 이상 */
 @media (min-width: 1200px) {
-  .container, .container-sm, .container-md, .container-lg, .container-xl {
-    max-width: 1140px; } }
+  .container,
+  .container-sm,
+  .container-md,
+  .container-lg,
+  .container-xl {
+    max-width: 1200px; /* 수정: 1140px에서 1200px로 변경 */
+  }
+}
 
+/* 1400px 이상 */
 @media (min-width: 1400px) {
-  .container, .container-sm, .container-md, .container-lg, .container-xl, .container-xxl {
-    max-width: 1320px; } }
+  .container,
+  .container-sm,
+  .container-md,
+  .container-lg,
+  .container-xl,
+  .container-xxl {
+    max-width: 1400px; /* 수정: 1320px에서 1400px로 변경 */
+  }
+}
 
 .row {
   --bs-gutter-x: 1.5rem;

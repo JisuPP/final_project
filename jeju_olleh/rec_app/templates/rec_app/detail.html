@@ -29,7 +29,7 @@ style="background-image: url('https://blog.kakaocdn.net/dn/o1KIw/btqu9mflPY6/rGk
               class="breadcrumb-item active text-white-50"
               aria-current="page"
             >
-            추천결과_#
+            추천결과
             </li>
           </ol>
         </nav>
@@ -70,6 +70,10 @@ style="background-image: url('https://blog.kakaocdn.net/dn/o1KIw/btqu9mflPY6/rGk
                             {% endfor %}
                         {% endfor %}
                     </ul>
+                <p class="text-black-50">
+                    주소 : {{ selected_destination.addr1 }} 
+                </p>   
+
                 <!-- 여기에 작게 지도 넣는 부분 -->
                 <div class="d-block agent-box p-5">
                     <iframe srcdoc="{{ selected_destination.map }}" width="100%" height="200px"></iframe>

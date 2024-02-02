@@ -43,15 +43,15 @@
         <div class="container">
             <div class="menu-bg-wrap">
             <div class="site-navigation">
-                <a href="{% url 'rec_app:rec_input' %}" class="logo m-0 float-start">제주에서 어디올레?</a>
+                <a href="{% url 'rec_app:home' %}" class="logo m-0 float-start">제주에서 어디올레?</a>
 
                 <ul
                 class="js-clone-nav d-none d-lg-inline-block text-start site-menu float-end"
                 >
-                <li class="active"><a href="{% url 'rec_app:rec_input' %}" class="Home">Home</a>
+                <li class="active"><a href="{% url 'rec_app:home' %}" class="Home">Home</a>
                 <li class="active"><a href="{% url 'rec_app:map' %}" class="Map">Map</a>
                 <li class="active"><a href="{% url 'rec_app:about' %}" class="About">About</a>
-                <li class="active"><a href="{% url 'rec_app:other_rec' %}" class="Others">Other</a>  
+                {% comment %} <li class="active"><a href="{% url 'rec_app:other_rec' %}" class="Others">Other</a>   {% endcomment %}
               </ul>
 
                 <a
