@@ -134,7 +134,7 @@ def get_nearest_weather_data(place_name):
         nearest_x, nearest_y = sorted_places.iloc[0][['격자 X', '격자 Y']]
 
         # API 키 설정
-        api_key = '/vkcKfsxxiJPh7yXYaK2eJVJGIyDnYVIwVSbW9erCEVnplIl2x54bxK/ANnlSVB6J9REJ3Cwy8a2Niznv7PbLw==' 
+        api_key = '' 
 
         # 현재 날짜와 시간 설정
         base_date = datetime.now().strftime('%Y%m%d')
