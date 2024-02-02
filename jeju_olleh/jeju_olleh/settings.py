@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 import os
 from pathlib import Path
+import db_settings
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-jf&jd^j-^mzo)t97xgl2ey5%0z^imttyl26dbje$t7y@5stp0t'
+# SECRET_KEY = 'django-insecure-jf&jd^j-^mzo)t97xgl2ey5%0z^imttyl26dbje$t7y@5stp0t'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -74,26 +75,15 @@ WSGI_APPLICATION = 'jeju_olleh.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
-
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'mysql.connector.django',
-#         'NAME': 'etlmysqlDM',
-#         'USER': 'lab17DM',
-#         'PASSWORD': 'Lab17DM!',
-#         'HOST': 'localhost',
-#         'PORT': '3306',
-#         'OPTIONS': {
-#             'autocommit': True,
-#         },
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
 #     }
 # }
+
+DATABASES = db_settings.DATABASES
+SECRET_KEY = db_settings.SECRET_KEY
 
 
 # Password validation
