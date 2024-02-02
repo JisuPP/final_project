@@ -90,8 +90,9 @@ def rec_address(request):
             keyword_input_ind = keyword_input_sim.argsort()[:, ::-1]
 
             # 결과 DataFrame 생성
-            result_df = df.iloc[keyword_input_ind[0]]  # 수정된 부분
+            result_df = df.iloc[keyword_input_ind[0]].copy()  # 수정된 부분
 
+            # 'selected_image_url' 컬럼에 이미지 URL 추가
             result_df['selected_image_url'] = result_df['title'].apply(get_image_url)
 
             # 15km 이내의 장소 필터링
@@ -107,7 +108,3 @@ def rec_address(request):
 def map(request):
     # 관광지 전체 목록 지도로 구성
     return render(request, 'rec_app/map.html')
-
-def new(request):
-    # 관광지 전체 목록 지도로 구성
-    return render(request, 'rec_app/new.html')

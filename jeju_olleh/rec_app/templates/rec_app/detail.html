@@ -43,7 +43,7 @@ style="background-image: url('https://blog.kakaocdn.net/dn/o1KIw/btqu9mflPY6/rGk
                 <div class="img-property-slide-wrap">
                     <div class="img-property-slide">
                         {% if selected_destination.selected_image_url %}
-                            <img src="{{ selected_destination.selected_image_url }}" alt="{{ selected_destination.title }} 이미지" class="img-fluid" />
+                            <img src="{{ selected_destination.selected_image_url }}" alt="{{ selected_destination.title }} 이미지" class="img-fluid" width="400" height="300" />
                         {% else %}
                             <!-- 이미지가 없는 경우 대체 이미지를 표시 -->
                             <img src="https://blog.kakaocdn.net/dn/Hh733/btrcA1znbC9/m3cFIkMBMYyJlnHe7WBiN1/img.gif" alt="{{ selected_destination.명칭 }} 이미지" class="img-fluid" />
