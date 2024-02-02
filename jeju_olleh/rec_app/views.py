@@ -92,10 +92,12 @@ def rec_address(request):
             # 결과 DataFrame 생성
             result_df = df.iloc[keyword_input_ind[0]]  # 수정된 부분
 
-            # 15km 이내의 장소 필터링
-            filtered_df = result_df[result_df.apply(lambda x: lat_long_distance(x['mapx'], x['mapy'], user_latitude, user_longitude) <= 15, axis=1)]
+            result_df['selected_image_url'] = result_df['title'].apply(get_image_url)
 
-            recommended_places = filtered_df.head(10)
+            # 15km 이내의 장소 필터링
+            filtered_df = result_df[result_df.apply(lambda x: lat_long_distance(x['mapy'], x['mapx'], user_latitude, user_longitude) <= 15, axis=1)]
+
+            recommended_places = filtered_df.head(5)
 
             # 결과를 HTML로 전달
             return render(request, 'rec_app/other_result.html', {'result_df': recommended_places})
