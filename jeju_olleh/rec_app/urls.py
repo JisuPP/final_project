@@ -11,9 +11,11 @@ urlpatterns = [
     # 서비스 관련 페이지
     path('about/', views.about, name='about'),
     path('map/',views.map, name='map' ),
+    path('other_rec/',views.other_rec, name='other_rec' ),
 
     # 시스템 결과창 페이지
-    path('other_rec/',views.other_rec, name='other_rec' ),
-    path('rec_place/',views.rec_place, name='rec_place' ),
+
+    path('rec_address/',views.rec_address, name='rec_address' ),
     path('detail/<str:destination>/', views.detail, name='detail'),
+
 ]

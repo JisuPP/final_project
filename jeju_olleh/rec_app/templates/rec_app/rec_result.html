@@ -1,29 +1,78 @@
-{% extends 'base.html' %}
+{% extends 'base2.html' %}
 
 {% block content %}
-    <!-- Recommended Destinations Section -->
-    {% if result_df is not None and not result_df.empty %}
-    <h2>추천 결과</h2>
-    <div class="grid">
-        {% for index, row in result_df.iterrows %}
-        <!-- Destination Card -->
-        <div class="destination-card">
-            <a href="{% url 'rec_app:detail' row.title %}">
-                <div class="destination-info">
-                    <h3 class="destination-title">{{ row.title }}</h3>
-                </div>
-                {% if row.selected_image_url %}
-                <img src="{{ row.selected_image_url }}" alt="{{ row.title }} 이미지">
-                {% else %}
-                <!-- 이미지가 없는 경우 대체 이미지를 표시 -->
-                <img src="https://blog.kakaocdn.net/dn/Hh733/btrcA1znbC9/m3cFIkMBMYyJlnHe7WBiN1/img.gif" alt="{{ row.title }} 이미지">
-                {% endif %} 
-            </a>
-        </div>
-        {% endfor %}
+<div
+class="hero page-inner overlay"
+style="background-image: url('https://blog.kakaocdn.net/dn/o1KIw/btqu9mflPY6/rGk1mM3iugV1c6jj9Z3E80/img.jpg')"
+>
+<div class="container">
+<div class="row justify-content-center align-items-center">
+    <div class="col-lg-9 text-center mt-5">
+    <h1 class="heading" data-aos="fade-up">Recommendations</h1>
+
+    <nav
+        aria-label="breadcrumb"
+        data-aos="fade-up"
+        data-aos-delay="200"
+    >
+        <ol class="breadcrumb text-center justify-content-center">
+        <li class="breadcrumb-item"><a href="{% url 'rec_app:rec_input' %}" class="Home">Home</a>
+        <li
+            class="breadcrumb-item active text-white-50"
+            aria-current="page"
+        >
+            Recommendations
+        </li>
+        </ol>
+    </nav>
     </div>
-    {% else %}
+</div>
+</div>
+</div>
+
+<!-- Recommended Destinations Section -->
+{% if result_df is not None and not result_df.empty %}
+    <div class="section section-properties">
+        <div class="container">
+            <div class="row">
+                {% for index, row in result_df.iterrows %}
+                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+                        <div class="property-item mb-30">
+                            <a href="{% url 'rec_app:detail' row.title %}" class="img">
+                                {% if row.selected_image_url %}
+                                    <img src="{{ row.selected_image_url }}" alt="{{ row.title }} 이미지" class="img-fluid" />
+                                {% else %}
+                                    <img src="https://blog.kakaocdn.net/dn/Hh733/btrcA1znbC9/m3cFIkMBMYyJlnHe7WBiN1/img.gif" alt="{{ row.title }} 이미지" class="img-fluid" />
+                                {% endif %}
+                            </a>
+
+                            <div class="property-content">
+                                <div class="price mb-2"><span>{{ row.title }}</span></div>
+                                <div>
+                                    <span class="d-block mb-2 text-black-50">{{ row.location }}</span>
+
+                                    <div class="specs d-flex mb-4">
+                                        <span class="d-block d-flex align-items-center me-3">
+                                            <span class="icon-bed me-2"></span>
+                                            <span class="caption">{{ row.reviews }}</span>
+                                        </span>
+                                        <span class="d-block d-flex align-items-center">
+                                            <span class="icon-bath me-2"></span>
+                                            <span class="caption">{{ row.ratings }}</span>
+                                        </span>
+                                    </div>
+
+                                    <a href="{% url 'rec_app:detail' row.title %}" class="btn btn-primary py-2 px-3">See details</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% else %}
     <p>추천 결과가 없습니다.</p>
-    {% endif %}
-    
+{% endif %}
+        
 {% endblock %}

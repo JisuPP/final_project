@@ -62,7 +62,7 @@ def other_rec(request):
     # place_rec 페이지에 대한 뷰 로직을 작성합니다.
     return render(request, 'rec_app/other_rec.html')
 
-def rec_place(request):
+def rec_address(request):
     if request.method == 'POST':
         # 사용자가 입력한 정보 가져오기
         user_input = request.POST.get('user_input')
@@ -95,7 +95,7 @@ def rec_place(request):
             # 15km 이내의 장소 필터링
             filtered_df = result_df[result_df.apply(lambda x: lat_long_distance(x['mapx'], x['mapy'], user_latitude, user_longitude) <= 15, axis=1)]
 
-            recommended_places = filtered_df.head(5)
+            recommended_places = filtered_df.head(10)
 
             # 결과를 HTML로 전달
             return render(request, 'rec_app/other_result.html', {'result_df': recommended_places})
@@ -105,3 +105,7 @@ def rec_place(request):
 def map(request):
     # 관광지 전체 목록 지도로 구성
     return render(request, 'rec_app/map.html')
+
+def new(request):
+    # 관광지 전체 목록 지도로 구성
+    return render(request, 'rec_app/new.html')

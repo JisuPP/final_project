@@ -1,38 +1,304 @@
-{% extends 'base.html' %}
-
+{% extends 'base2.html' %}
+{% load static %}
 {% block content %}
-    <!-- Content section-->
-    <section class="main-content">
-            <div>
-                <div style="display: flex; flex-direction: column;">
-                    <h2 style="margin-bottom: 10px;">제주에서 어디올레?</h2>
-                    <h5>여행자의 유형을 고려한 제주 여행지 추천 시스템</h5>
-                    <p> 제주도에 여행을 하러 온 이들을 위한 서비스. 현재 제주도에서 뭘하고 싶은지? 뭐가 필요한지? 자신에게 맞는 여행지를 선택하지 못하는 이들을 위해서 자신과 비슷한 유형의
-                        여행자들은 어디를 갔는지를 바탕으로 여행지를 추천하는 서비스</p>
-                    <p>'제주올래?'는 계획 없이 제주도를 여행하는 여행객들을 위한 새로운 여행 서비스입니다.
-                        사용자들은 이 서비스를 통해 현재 위치 또는 특정 지역에서 제주도의 다양한 여행 명소, 맛집, 날씨 등에 대한 정보를 실시간을 확인할 수 있습니다. </p>
-                    <p> 주요 기능 </p>
-                    <p> 1. 위치 기반 추천 </p>
-                    <p> 위치 정보를 입력하면 입력된 정볼ㄹ 기반으로 주변의 여행 관련 정보와 실시간 날씨 정보를 제공합니다</p>
-                    <p> 2. 평점 </p>
-                    <p> 다른 여행객들의 평점을 확인하여 여행 명소의 실제 경험 정도를 파악할 수 있습니다.</p>  
-                </div>
-            </div>
-            <hr>
-            <!-- 팀원 설명 추가 -->
-                <div>
-                    <h5>4조</h5>
-                    <p>강병욱, 김민서, 박지수, 이상민, 이윤희</p>
-                </div>
-                <div>
-                    <h5>수행 도구 </h5>
-                    <p>Front end : CSS, HTML, Javascript <br>
-                        Back end: python, Django<br>
-                        데이터: pandas, numpy, matplotlib, seaborn
-                    </p>
-                </div>
-            </div>
+
+    <div
+      class="hero page-inner overlay"
+      style="background-image: url('https://www.lottehotel.com/content/dam/lotte-hotel/lotte/jeju/overview/introduction/g-0807.jpg.thumb.768.768.jpg')"
+    >
+      <div class="container">
+        <div class="row justify-content-center align-items-center">
+          <div class="col-lg-9 text-center mt-5">
+            <h1 class="heading" data-aos="fade-up">About</h1>
+
+            <nav
+              aria-label="breadcrumb"
+              data-aos="fade-up"
+              data-aos-delay="200"
+            >
+              <ol class="breadcrumb text-center justify-content-center">
+                <li class="breadcrumb-item"><a href="{% url 'rec_app:rec_input' %}" class="Home">Home</a>
+                <li
+                  class="breadcrumb-item active text-white-50"
+                  aria-current="page"
+                >
+                  About
+                </li>
+              </ol>
+            </nav>
+          </div>
         </div>
-    </section>
-</body>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="container">
+        <div class="row text-left mb-5">
+          <div class="col-12">
+            <h2 class="font-weight-bold heading text-primary mb-4">About Us</h2>
+          </div>
+          <div class="col-lg-6">
+            <p class="text-black-50">
+              제주도 여행을 계획하던 중, 포털 사이트나 블로그, SNS의 광고에 지친 경험 모두들 있으실 거에요. 
+              이 프로젝트는 제주도 여행 전 이러한 어려움을 겪는 모든 사람들을 위한 서비스입니다.
+            </p>
+            <p class="text-black-50">
+              저희는 신뢰성있는 <a href="https://api.visitkorea.or.kr/#/hubTourSearch" target="_blank">한국관광공사</a>의 데이터를 사용해 보다 정확하고 객관적인 정보를 제공합니다. 
+              또한, 좀 더 신뢰도를 높이기 위해 <a href="https://www.google.co.kr/maps/?hl=ko" target="_blank">구글맵</a>의 평점과 리뷰 수도 넣었어요.
+            </p>
+            <p class="text-black-50">
+              여러분은 원하는 여행스타일을 검색창에 넣어주시면 됩니다. 저희가 맘에 드는 여행지를 추천해 드릴게요!
+
+            </p>
+          </div>
+          <div class="col-lg-6">
+            <p class="text-black-50">
+              추천해드린 여행지가 마음에 드셨거나 혹시라도 마음에 드시자 않으셨다면, 추천 결과에 대한 피드백을 주시면 저희 서비스의 발전에 도움이 됩니다.
+            </p>
+            <p class="text-black-50">
+             * 이 프로젝트는 멀티캠퍼스 데이터 분석&엔지니어(Python) 30회차 4조(강병욱, 김민서, 박지수, 이상민,이윤희)의 작업물입니다.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section pt-0">
+      <div class="container">
+        <div class="row justify-content-between mb-5">
+          <div class="col-lg-7 mb-5 mb-lg-0 order-lg-2">
+            <div class="img-about dots">
+              <img src="{% static 'images/tour_api.png' %}" alt="Image" class="img-fluid" />
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="d-flex feature-h">
+              </span>
+              <div class="feature-text">
+                <h3 class="heading">한국관광공사 API</h3>
+                <p class="text-black-50">
+                  한국관광공사가 보유하고 있는 전국의 다양한 관광정보와 사진정보를 실시간으로 제공 받을 수 있으며,
+                  국내 최대 관광정보 포털사이트인 <a href="www.visitkorea.or.kr" target="_blank">비짓코리아 (Visit Korea)</a> 홈페이지에서 제공하는 관광정보 중 저작권 등에 구애 없이 자유롭게 활용 가능한 정보만을 선별하여 홈페이지와 동일한 최신정보를 제공합니다.
+                </p>
+                <hr>
+                <p class="text-black-50">
+                  ✔️ 관광지명, 사진, 개요, 주소, 위도, 경도, 분류명 등 여러 정보를 포함합니다.<br>
+                  ✔️ OpenAPI를 활용하여 데이터를 수집하고, 목적에 맞게 전처리하였습니다.<br>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section pt-0">
+      <div class="container">
+        <div class="row justify-content-between mb-5">
+          <div class="col-lg-7 mb-5 mb-lg-0">
+            <div class="img-about dots">
+              <img src="{% static 'images/google_maps.png' %}" alt="Image" class="img-fluid" />
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="d-flex feature-h">
+              <div class="feature-text">
+                <h3 class="heading">Google Maps 평점﹒리뷰</h3>
+                <p class="text-black-50">
+                  구글 지도(영어: Google Maps)는 구글에서 제공하는 지도 서비스입니다.
+                  Google Maps는 사용자들이 직접 작성한 전세계 장소의 평점과 리뷰를 제공합니다. 
+                </p>
+                  <hr>
+                <p class="text-black-50">
+                  ✔️ 크롤러를 개발하여 각 관광지의 평점과 리뷰수를 크롤링했습니다. <br>
+                  ✔️ 리뷰 수를 반영한 '제주에서 어디올레'만의 "가중평점"을 개발했습니다.<br>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="section sec-testimonials bg-light">
+      <div class="container">
+        <div class="row mb-5 align-items-center">
+          <div class="col-md-6">
+            <h2 class="font-weight-bold heading text-primary mb-4 mb-md-0">
+              The Team
+            </h2>
+          </div>
+          <div class="col-md-6 text-md-end">
+            <div id="testimonial-nav">
+              <span class="prev" data-controls="prev">Prev</span>
+
+              <span class="next" data-controls="next">Next</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-lg-4"></div>
+        </div>
+        <div class="testimonial-slider-wrap">
+          <div class="testimonial-slider">
+            <div class="item">
+              <div class="testimonial">
+                <img
+                  src="images/person_1-min.jpg"
+                  alt="Image"
+                  class="img-fluid rounded-circle w-25 mb-4"
+                />
+                <h3 class="h5 text-primary">강병욱</h3>
+                <p class="text-black-50">Frontend, Backend</p>
+
+                <p>
+                  이런이런이런 일들을 했어요. 블라블라블라
+                </p>
+
+                <!-- <ul class="social list-unstyled list-inline dark-hover">
+                  <li class="list-inline-item">
+                    <a href="#"><span class="icon-twitter"></span></a>
+                  </li>
+                  <li class="list-inline-item">
+                    <a href="#"><span class="icon-facebook"></span></a>
+                  </li>
+                  <li class="list-inline-item">
+                    <a href="#"><span class="icon-linkedin"></span></a>
+                  </li>
+                  <li class="list-inline-item">
+                    <a href="#"><span class="icon-instagram"></span></a>
+                  </li>
+                </ul> -->
+              </div>
+            </div>
+
+            <div class="item">
+              <div class="testimonial">
+                <img
+                  src="images/person_2-min.jpg"
+                  alt="Image"
+                  class="img-fluid rounded-circle w-25 mb-4"
+                />
+                <h3 class="h5 text-primary">김민서</h3>
+                <p class="text-black-50">Frontend, Backend</p>
+
+                <p>
+                  이런이런이런 일들을 했어요. 블라블라블라
+                </p>
+
+                <!-- <ul class="social list-unstyled list-inline dark-hover">
+                  <li class="list-inline-item">
+                    <a href="#"><span class="icon-twitter"></span></a>
+                  </li>
+                  <li class="list-inline-item">
+                    <a href="#"><span class="icon-facebook"></span></a>
+                  </li>
+                  <li class="list-inline-item">
+                    <a href="#"><span class="icon-linkedin"></span></a>
+                  </li>
+                  <li class="list-inline-item">
+                    <a href="#"><span class="icon-instagram"></span></a>
+                  </li>
+                </ul> -->
+              </div>
+            </div>
+
+            <div class="item">
+              <div class="testimonial">
+                <img
+                  src="images/person_3-min.jpg"
+                  alt="Image"
+                  class="img-fluid rounded-circle w-25 mb-4"
+                />
+                <h3 class="h5 text-primary">박지수</h3>
+                <p class="text-black-50">Frontend, Backend</p>
+
+                <p>
+                  이런이런이런 일들을 했어요. 블라블라블라
+                </p>
+
+                <!-- <ul class="social list-unstyled list-inline dark-hover">
+                  <li class="list-inline-item">
+                    <a href="#"><span class="icon-twitter"></span></a>
+                  </li>
+                  <li class="list-inline-item">
+                    <a href="#"><span class="icon-facebook"></span></a>
+                  </li>
+                  <li class="list-inline-item">
+                    <a href="#"><span class="icon-linkedin"></span></a>
+                  </li>
+                  <li class="list-inline-item">
+                    <a href="#"><span class="icon-instagram"></span></a>
+                  </li>
+                </ul> -->
+              </div>
+            </div>
+
+            <div class="item">
+              <div class="testimonial">
+                <img
+                  src="images/person_4-min.jpg"
+                  alt="Image"
+                  class="img-fluid rounded-circle w-25 mb-4"
+                />
+                <h3 class="h5 text-primary">이상민</h3>
+                <p class="text-black-50">Frontend, Backend</p>
+
+                <p>
+                  이런이런이런 일들을 했어요. 블라블라블라
+                </p>
+
+                <!-- <ul class="social list-unstyled list-inline dark-hover">
+                  <li class="list-inline-item">
+                    <a href="#"><span class="icon-twitter"></span></a>
+                  </li>
+                  <li class="list-inline-item">
+                    <a href="#"><span class="icon-facebook"></span></a>
+                  </li>
+                  <li class="list-inline-item">
+                    <a href="#"><span class="icon-linkedin"></span></a>
+                  </li>
+                  <li class="list-inline-item">
+                    <a href="#"><span class="icon-instagram"></span></a>
+                  </li>
+                </ul> -->
+              </div>
+            </div>
+
+            <div class="item">
+              <div class="testimonial">
+                <img
+                  src="images/person_5-min.jpg"
+                  alt="Image"
+                  class="img-fluid rounded-circle w-25 mb-4"
+                />
+                <h3 class="h5 text-primary">이윤희</h3>
+                <p class="text-black-50">Frontend, Backend</p>
+
+                <p>
+                  이런이런이런 일들을 했어요. 블라블라블라
+                </p>
+
+                <!-- <ul class="social list-unstyled list-inline dark-hover">
+                  <li class="list-inline-item">
+                    <a href="#"><span class="icon-twitter"></span></a>
+                  </li>
+                  <li class="list-inline-item">
+                    <a href="#"><span class="icon-facebook"></span></a>
+                  </li>
+                  <li class="list-inline-item">
+                    <a href="#"><span class="icon-linkedin"></span></a>
+                  </li>
+                  <li class="list-inline-item">
+                    <a href="#"><span class="icon-instagram"></span></a>
+                  </li>
+                </ul> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>  
+
 {% endblock %}

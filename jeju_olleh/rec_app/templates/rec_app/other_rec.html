@@ -1,22 +1,96 @@
-{% extends 'base.html' %}
+{% extends 'base2.html' %}
 
 {% block content %}
-    <!-- Main Content -->
-    <div class="main-content">
-        <h2 class="rec_input">여행지 추천받기</h2>
-        <form method="post" action="{% url 'rec_app:rec_place' %}">
-            {% csrf_token %}
-            <div class="user_location">
-                <label for="user_input">당신이 원하는 여행지는?:</label>
-                <input type="text" name="user_input" required>
-            </div>
-            <br>
-            <div class="user_address">
-                <label for="address_input">현재 주소 혹은 여행 예정 주소지를 입력해주세요:</label>
-                <input type="text" name="address_input" required>
-            </div>
-            <button type="submit">추천 받기</button>
-        </form>
+<div class="hero">
+    <div class="hero-slide">
+        <div
+        class="img overlay"
+        style="background-image: url('https://t4.ftcdn.net/jpg/05/26/12/59/360_F_526125944_Z01KZKcnbOBf4KM4WGXlIb5rW4dK1vOp.jpg')"
+        ></div>
+        <div
+        class="img overlay"
+        style="background-image: url('https://d2ur7st6jjikze.cloudfront.net/offer_photos/100626/546238_large_1605746699.jpg?1605746699')"
+        ></div>
+        <div
+        class="img overlay"
+        style="background-image: url('https://api.cdn.visitjeju.net/photomng/imgpath/202111/15/2bb7145b-d0f8-406d-9a4f-258e6f60c37d.jpg')"
+        ></div>
+        <div
+        class="img overlay"
+        style="background-image: url('https://ssmenews.com/news/data/20220224/p1065580876219594_687_thum.jpg')"
+        ></div>
+        <div
+        class="img overlay"
+        style="background-image: url('https://d2ur7st6jjikze.cloudfront.net/offer_photos/142219/913230_large_1699347290.jpg?1699347290')"
+        ></div>
+        <div
+        class="img overlay"
+        style="background-image: url('https://api.cdn.visitjeju.net/photomng/imgpath/202201/17/148eb222-002a-49ff-9ae8-9f9f7d634e6c.jpg')"
+        ></div>
+        <div
+        class="img overlay"
+        style="background-image: url('https://c2.staticflickr.com/6/5795/30527709436_61437900d3_b.jpg')"
+        ></div>
+        <div
+        class="img overlay"
+        style="background-image: url('https://www.lotteresort.com/static/upload/editor/image/89ae0098-5b69-43cb-a059-f0d469452d9d.jpg')"
+        ></div>
     </div>
+
+        <div class="container">
+            <div class="row justify-content-center align-items-center">
+                <div class="col-lg-9 text-center">
+                    <h1 class="heading" data-aos="fade-up">
+                        제주 여행지를 찾는 가장 쉬운 방법 2번째
+                    </h1>
+                    <form
+                        method="post" action="{% url 'rec_app:rec_address' %}"
+                        class="narrow-w form-search d-flex align-items-stretch mb-3"
+                        data-aos="fade-up"
+                        data-aos-delay="200"
+                    >
+                        {% csrf_token %}
+                        <input
+                            type="text"
+                            class="form-control px-4"
+                            name="user_input"
+                            placeholder="당신이 원하는 여행 타입을 입력해주세요"
+                        />
+                        <input
+                            type="text"
+                            class="form-control px-4"
+                            name="address_input"
+                            placeholder="현재 주소 혹은 여행 예정 주소지를 입력해주세요"
+                        />
+                        <div class="user-input">
+                            <button type="submit" class="btn btn-primary">search</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        {% if result_df %}
+        <div class="recommendation-results">
+            <h2>추천 결과</h2>
+            <table border="1">
+                <tr>
+                    <th>여행지 명칭</th>
+                    <th>가중 평점</th>
+                    <th>개요</th>
+                    <th>유사도</th>
+                </tr>
+                {% for index, row in result_df.iterrows %}
+                    <tr>
+                        <td><a href="{% url 'rec_app:detail' index %}">{{ row.명칭 }}</a></td>
+                        <td>{{ row.weighted_평점 }}</td>
+                        <td>{{ row.개요 }}</td>
+                        <td>{{ row.similarity }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    {% endif %}
+
 {% endblock %}
 
