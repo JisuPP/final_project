@@ -1,41 +1,29 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div
-class="hero page-inner overlay"
-style="background-image: url('https://blog.kakaocdn.net/dn/o1KIw/btqu9mflPY6/rGk1mM3iugV1c6jj9Z3E80/img.jpg')"
->
-<div class="container">
-<div class="row justify-content-center align-items-center">
-    <div class="col-lg-9 text-center mt-5">
-    <h1 class="heading" data-aos="fade-up">Recommendations</h1>
+<div class="hero page-inner overlay" style="background-image: url('https://blog.kakaocdn.net/dn/o1KIw/btqu9mflPY6/rGk1mM3iugV1c6jj9Z3E80/img.jpg')">
+    <div class="container">
+        <div class="row justify-content-center align-items-center">
+            <div class="col-lg-9 text-center mt-5">
+                <h1 class="heading" data-aos="fade-up">Recommendations</h1>
 
-    <nav
-        aria-label="breadcrumb"
-        data-aos="fade-up"
-        data-aos-delay="200"
-    >
-        <ol class="breadcrumb text-center justify-content-center">
-        <li class="breadcrumb-item"><a href="{% url 'rec_app:rec_input' %}" class="Home">Home</a>
-        <li
-            class="breadcrumb-item active text-white-50"
-            aria-current="page"
-        >
-            Recommendations
-        </li>
-        </ol>
-    </nav>
+                <nav aria-label="breadcrumb" data-aos="fade-up" data-aos-delay="200">
+                    <ol class="breadcrumb text-center justify-content-center">
+                        <li class="breadcrumb-item"><a href="{% url 'rec_app:rec_input' %}" class="Home">Home</a></li>
+                        <li class="breadcrumb-item active text-white-50" aria-current="page">Recommendations</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
     </div>
-</div>
-</div>
 </div>
 
 <!-- Recommended Destinations Section -->
-{% if result_df is not None and not result_df.empty %}
+{% if recommended_places is not None and not recommended_places.empty %}
     <div class="section section-properties">
         <div class="container">
             <div class="row">
-                {% for index, row in result_df.iterrows %}
+                {% for index, row in recommended_places.iterrows %}
                     <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
                         <div class="property-item mb-30">
                             <a href="{% url 'rec_app:detail' row.title %}" class="img">

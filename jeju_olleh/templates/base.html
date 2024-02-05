@@ -40,9 +40,9 @@
         </div>
 
         <nav class="site-nav">
-        <div class="container">
+          <div class="container">
             <div class="menu-bg-wrap">
-            <div class="site-navigation">
+              <div class="site-navigation">
                 <a href="{% url 'rec_app:home' %}" class="logo m-0 float-start">제주에서 어디올레?</a>
 
                 <ul
@@ -51,8 +51,7 @@
                 <li class="active"><a href="{% url 'rec_app:home' %}" class="Home">Home</a>
                 <li class="active"><a href="{% url 'rec_app:map' %}" class="Map">Map</a>
                 <li class="active"><a href="{% url 'rec_app:about' %}" class="About">About</a>
-                {% comment %} <li class="active"><a href="{% url 'rec_app:other_rec' %}" class="Others">Other</a>   {% endcomment %}
-              </ul>
+                </ul>
 
                 <a
                 href="#"
@@ -62,9 +61,9 @@
                 >
                 <span></span>
                 </a>
+              </div>
             </div>
-            </div>
-        </div>
+          </div>
         </nav>
 
         {% block content %}
@@ -89,12 +88,6 @@
       <!-- /.site-footer -->
   
         <!-- Preloader -->
-        <div id="overlayer"></div>
-        <div class="loader">
-            <div class="spinner-border" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
-        </div>
         <script src="{% static 'js/tiny-slider.js' %}"></script>
         <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
         <script src="{% static 'js/aos.js' %}"></script>

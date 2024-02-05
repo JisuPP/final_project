@@ -1,4 +1,4 @@
-{% extends 'base2.html' %}
+{% extends 'base.html' %}
 
 {% block content %}
 
@@ -12,7 +12,7 @@ style="background-image: url('https://blog.kakaocdn.net/dn/o1KIw/btqu9mflPY6/rGk
     <div class="row justify-content-center align-items-center">
       <div class="col-lg-9 text-center mt-5">
         <h1 class="heading" data-aos="fade-up">
-          추천결과_#
+            Detail
         </h1>
 
         <nav
@@ -21,15 +21,9 @@ style="background-image: url('https://blog.kakaocdn.net/dn/o1KIw/btqu9mflPY6/rGk
           data-aos-delay="200"
         >
           <ol class="breadcrumb text-center justify-content-center">
-            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+            <li class="breadcrumb-item"><a href="index.html">Recommendations</a></li>
             <li class="breadcrumb-item">
-              <a href="properties.html">Recommendations</a>
-            </li>
-            <li
-              class="breadcrumb-item active text-white-50"
-              aria-current="page"
-            >
-            추천결과
+              <a href="properties.html">Detail Recommendations</a>
             </li>
           </ol>
         </nav>
@@ -43,7 +37,7 @@ style="background-image: url('https://blog.kakaocdn.net/dn/o1KIw/btqu9mflPY6/rGk
                 <div class="img-property-slide-wrap">
                     <div class="img-property-slide">
                         {% if selected_destination.selected_image_url %}
-                            <img src="{{ selected_destination.selected_image_url }}" alt="{{ selected_destination.title }} 이미지" class="img-fluid" width="400" height="300" />
+                            <img src="{{ selected_destination.selected_image_url }}" alt="{{ selected_destination.title }} 이미지" class="img-fluid" width="90%" height="90%" />
                         {% else %}
                             <!-- 이미지가 없는 경우 대체 이미지를 표시 -->
                             <img src="https://blog.kakaocdn.net/dn/Hh733/btrcA1znbC9/m3cFIkMBMYyJlnHe7WBiN1/img.gif" alt="{{ selected_destination.명칭 }} 이미지" class="img-fluid" />
@@ -52,7 +46,7 @@ style="background-image: url('https://blog.kakaocdn.net/dn/o1KIw/btqu9mflPY6/rGk
                 </div>
             </div>
             <div class="col-lg-4">
-                <h2 class="heading text-primary">{{ selected_destination.title }} 상세 정보</h2>
+                <h3 class="heading text-primary">{{ selected_destination.title }} 상세 정보</h3>
                 <p class="meta">{{ selected_destination.address }}</p>
                 <p class="text-black-50">
                     {{ selected_destination.overview_prep }}
@@ -63,7 +57,7 @@ style="background-image: url('https://blog.kakaocdn.net/dn/o1KIw/btqu9mflPY6/rGk
                     <br>
                     구글 리뷰 수: {{ selected_destination.Reviews }} 개
                 </p>
-                <h3>오늘의 날씨</h3>
+                <h2>오늘의 날씨</h2>
                     <ul>
                         {% for info in selected_destination.weather_info %}
                             {% for category, value in info.items %}

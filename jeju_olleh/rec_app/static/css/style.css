@@ -136,7 +136,8 @@ h6, .h6 {
 
 p {
   margin-top: 0;
-  margin-bottom: 1rem; }
+  margin-bottom: 1rem;
+  font-size: 1rem; }
 
 abbr[title],
 abbr[data-bs-original-title] {
@@ -1171,7 +1172,7 @@ progress {
     flex: 0 0 auto;
     width: 16.66667%; }
   .col-lg-auto {
-    -webkit-box-flex: 0;
+    -webkit-box-flex: 0;col-lg-4
     -ms-flex: 0 0 auto;
     flex: 0 0 auto;
     width: auto; }

@@ -29,15 +29,15 @@ def rec_input(request):
         keyword_input_ind = keyword_input_sim.argsort()[:, ::-1]
 
         # 결과 DataFrame 생성
-        result_df_tfidf = df.iloc[keyword_input_ind[0, :10]].sort_values('Rating', ascending=False)[:7]
+        result_df = df.iloc[keyword_input_ind[0, :10]].sort_values('Rating', ascending=False)[:7]
 
-        if not result_df_tfidf.empty:
+        if not result_df.empty:
 
             #이미지 URL 추가
-            result_df_tfidf['selected_image_url'] = result_df_tfidf['title'].apply(get_image_url)
+            result_df['selected_image_url'] = result_df['title'].apply(get_image_url)
 
             # 결과를 HTML로 전달
-            return render(request, 'rec_app/rec_result.html', {'result_df': result_df_tfidf})
+            return render(request, 'rec_app/rec_result.html', {'result_df': result_df})
     
     # GET 요청에 대한 처리를 추가
     return render(request, 'rec_app/rec_input.html')
@@ -62,50 +62,44 @@ def about(request):
     # About 페이지에 대한 뷰 로직을 작성합니다.
     return render(request, 'rec_app/about.html')
 
+
 def rec_address(request):
     if request.method == 'POST':
+
         # 사용자가 입력한 정보 가져오기
-        user_input = request.POST.get('second_user_input')
+        user_input = request.POST['second_user_input']
         user_address = request.POST.get('address_input')
+        keyword_input = tokenize_user_input(user_input)
+        keyword_input = ' '.join(keyword_input)
 
-        if user_address:
-            # 사용자의 주소 정보 가져오기
-            user_coordinates = get_address_info(user_address)
+        # 주소
+        user_coordinates = get_address_info(user_address)
+        user_latitude = user_coordinates['Latitude'].iloc[0]
+        user_longitude = user_coordinates['Longitude'].iloc[0]
 
-            if not user_coordinates.empty:
-                user_latitude = user_coordinates['Latitude'].iloc[0]
-                user_longitude = user_coordinates['Longitude'].iloc[0]
+        # 데이터 가져오기
+        file_path = os.path.join(settings.BASE_DIR, 'jeju_olleh', 'modules', 'fin_token.csv')
+        df = pd.read_csv(file_path, encoding='utf-8')
 
-                # 데이터 가져오기
-                file_path = os.path.join(settings.BASE_DIR, 'jeju_olleh', 'modules', 'fin_token.csv')
-                df = pd.read_csv(file_path, encoding='utf-8')
+        # TF-IDF matrix, vectorizer 가져오기
+        tfidf_mat = load_tfidf_matrix()
+        tfidf_vect = load_tfidf_vectorizer()
 
-                # TF-IDF matrix, vectorizer 가져오기
-                tfidf_mat = load_tfidf_matrix()
-                tfidf_vect = load_tfidf_vectorizer()
+        # 사용자 입력 키워드에 대한 TF-IDF 값 계산
+        keyword_input_mat = tfidf_vect.transform([(keyword_input)])
+        keyword_input_sim = cosine_similarity(keyword_input_mat, tfidf_mat)
+        keyword_input_ind = keyword_input_sim.argsort()[:, ::-1]
+        
+        result_df = df.iloc[keyword_input_ind[0]]
 
-                # 사용자 입력 키워드에 대한 TF-IDF 값 계산
-                if user_input is not None:
-                    user_input = user_input.lower()  # 소문자로 변환
-                    keyword_input_mat = tfidf_vect.transform([user_input])
-                    keyword_input_sim = cosine_similarity(keyword_input_mat, tfidf_mat)
-                    keyword_input_ind = keyword_input_sim.argsort()[:, ::-1]
+        result_df['selected_image_url'] = result_df['title'].apply(get_image_url)
 
-                    # 결과 DataFrame 생성
-                    result_df = df.iloc[keyword_input_ind[0]]
+        filtered_df = result_df[result_df.apply(lambda x: lat_long_distance(x['mapy'], x['mapx'], user_latitude, user_longitude) <= 15, axis=1)]
 
-                    # 'selected_image_url' 컬럼에 이미지 URL 추가
-                    result_df['selected_image_url'] = result_df['title'].apply(get_image_url)
+        recommended_places = filtered_df.head(5)
 
-                    # 15km 이내의 장소 필터링
-                    filtered_df = result_df[result_df.apply(lambda x: lat_long_distance(x['mapx'], x['mapy'], user_latitude, user_longitude) <= 15, axis=1)]
-
-                    recommended_places = filtered_df.head(5)
-
-                    # 결과를 HTML로 전달
-                    return render(request, 'rec_app/rec_result.html', {'result_df': recommended_places})
-                
-    # 다른 경우에는 입력 폼을 다시 보여줌
+        return render(request, 'rec_app/other.html', {'recommended_places' : recommended_places})
+    
     return render(request, 'rec_app/rec_input.html')
 
 
