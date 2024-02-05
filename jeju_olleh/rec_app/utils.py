@@ -158,7 +158,6 @@ def get_weather_data(api_key, base_date, base_time, nearest_x, nearest_y):
     
     # 초단기실황조회 url에서 정보를 가져옴
     base_url = 'http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtNcst' 
-
     params = {
         'serviceKey': api_key,
         'numOfRows': '10',
@@ -171,12 +170,10 @@ def get_weather_data(api_key, base_date, base_time, nearest_x, nearest_y):
     }
     
     response = requests.get(base_url, params=params)
-    
     if response.status_code == 200:
         try:
             data = response.json()
             weather_info_list = []
-            # print("API Response:", data)
 
             if 'item' in data['response']['body']['items']:
                 items = data['response']['body']['items']['item']
