@@ -5,6 +5,16 @@ from datetime import datetime
 from konlpy.tag import Okt
 from django.conf import settings
 from math import radians, sin, cos, sqrt, atan2
+from .models import ModelDf, DjangoDf
+import folium
+
+def take_modeldf():
+    modeldf = ModelDf.objects.all()
+    return modeldf
+
+def take_djangodf():
+    djangodf = DjangoDf.objects.all()
+    return djangodf
 
 def tokenize_user_input(user_input):
     okt = Okt()
@@ -67,10 +77,8 @@ def lat_long_distance(lat1, lon1, lat2, lon2):
     return distance
 
 def get_address_info(address):
-
     # 주소를 가져오기 위한 url
     apiurl = "https://api.vworld.kr/req/address?"
-
     params = {
         "service": "address",
         "request": "getcoord",
@@ -81,25 +89,19 @@ def get_address_info(address):
         "key": "054C4365-485B-35C4-9219-1C30E6B61D7C"
     }
     response = requests.get(apiurl, params=params)
-
     if response.status_code == 200:
-
         data = response.json()
-
         if 'response' in data and 'refined' in data['response'] and 'text' in data['response']['refined']:
             address = data['response']['refined']['text']
             latitude = float(data['response']['result']['point']['y'])
             longitude = float(data['response']['result']['point']['x'])
-            
             # DataFrame 생성
             df = pd.DataFrame({
                 'Address': [address],
                 'Latitude': [latitude],
                 'Longitude': [longitude]
             })
-
             return df
-        
         else:
             print("Failed to retrieve data from the API.")
             return pd.DataFrame()  # 빈 DataFrame 반환
@@ -134,7 +136,7 @@ def get_nearest_weather_data(place_name):
         nearest_x, nearest_y = sorted_places.iloc[0][['격자 X', '격자 Y']]
 
         # API 키 설정
-        api_key = '' 
+        api_key = '/vkcKfsxxiJPh7yXYaK2eJVJGIyDnYVIwVSbW9erCEVnplIl2x54bxK/ANnlSVB6J9REJ3Cwy8a2Niznv7PbLw==' 
 
         # 현재 날짜와 시간 설정
         base_date = datetime.now().strftime('%Y%m%d')
@@ -279,3 +281,12 @@ def get_image_url(destination):
 #         print(f"Error : {response.status_code}")
 #         data = response.text
 #         return data
+
+ # 현재 위치 지도로 확인하는 컬럼 추가
+def create_folium_map(location_info):
+    m = folium.Map(location=[location_info['mapy'], location_info['mapx']], zoom_start=12)
+    folium.Marker(
+        location=[location_info['mapy'], location_info['mapx']],
+        popup=location_info['title']
+    ).add_to(m)
+    return m._repr_html_()

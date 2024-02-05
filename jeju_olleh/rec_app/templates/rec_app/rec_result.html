@@ -40,7 +40,7 @@ style="background-image: url('https://blog.kakaocdn.net/dn/o1KIw/btqu9mflPY6/rGk
                         <div class="property-item mb-30">
                             <a href="{% url 'rec_app:detail' row.title %}" class="img">
                                 {% if row.selected_image_url %}
-                                    <img src="{{ row.selected_image_url }}" alt="{{ row.title }} 이미지" class="img-fluid" style="width: 100%; height: auto;" />
+                                    <img src="{{ row.selected_image_url }}" alt="{{ row.title }} 이미지" class="img-fluid"  />
                                 {% else %}
                                     <img src="https://blog.kakaocdn.net/dn/Hh733/btrcA1znbC9/m3cFIkMBMYyJlnHe7WBiN1/img.gif" alt="{{ row.title }} 이미지" class="img-fluid" />
                                 {% endif %}
@@ -53,11 +53,11 @@ style="background-image: url('https://blog.kakaocdn.net/dn/o1KIw/btqu9mflPY6/rGk
                                     <div class="specs d-flex mb-2">
                                         <span class="d-block d-flex align-items-center me-2">
                                             <span class="icon-star me-2"></span>
-                                            <span class="caption"> 별점 {{ row.Rating }}</span>
+                                            <span class="caption"> 별점 {{ row.rating }}</span>
                                         </span>
                                         <span class="d-block d-flex align-items-center">
                                             <span class="icon-rate_review me-2"></span>
-                                            <span class="caption"> 리뷰수 {{ row.Reviews }} </span>
+                                            <span class="caption"> 리뷰수 {{ row.reviews }} </span>
                                         </span>
                                     </div>
 

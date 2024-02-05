@@ -18,4 +18,10 @@ urlpatterns = [
     # 시스템 결과창 페이지
     path('detail/<str:destination>/', views.detail, name='detail'),
 
+    # DB > CSV
+    # path('export-django-df-to-csv/', views.export_django_df_to_csv, name='export_django_df_to_csv')
+
+    # DB > CSV
+    # path('export-to-csv/', views.export_to_csv, name='export_to_csv'),
+
 ]

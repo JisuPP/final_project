@@ -41,16 +41,16 @@
 
         <nav class="site-nav">
           <div class="container">
-            <div class="menu-bg-wrap">
+            {% comment %} <div class="menu-bg-wrap"> {% endcomment %}
               <div class="site-navigation">
-                <a href="{% url 'rec_app:home' %}" class="logo m-0 float-start">제주에서 어디올레?</a>
+                <a href="{% url 'rec_app:home' %}" class="logo m-0 float-start" style="font-weight: bold;" >제주에서 어디올레?</a>
 
                 <ul
                 class="js-clone-nav d-none d-lg-inline-block text-start site-menu float-end"
                 >
-                <li class="active"><a href="{% url 'rec_app:home' %}" class="Home">Home</a>
-                <li class="active"><a href="{% url 'rec_app:map' %}" class="Map">Map</a>
-                <li class="active"><a href="{% url 'rec_app:about' %}" class="About">About</a>
+                <li class="active" style="font-weight: bold;"><a href="{% url 'rec_app:home' %}" class="Home">Home</a>
+                <li class="active" style="font-weight: bold;"><a href="{% url 'rec_app:map' %}" class="Map">Map</a>
+                <li class="active" style="font-weight: bold;"><a href="{% url 'rec_app:about' %}" class="About">About</a>
                 </ul>
 
                 <a
@@ -72,13 +72,13 @@
         <div class="row mt-5">
             <div class="col-12 text-center">
           
-              <p>
+              <ul>
                 Copyright &copy;
                 <script>
                   document.write(new Date().getFullYear());
                 </script>
                 . All Rights Reserved. &mdash; Designed by 4조
-              </p>
+              </ul>
               
             </div>
           </div>
