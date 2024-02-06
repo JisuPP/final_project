@@ -79,38 +79,33 @@ def about(request):
 
 def rec_address(request):
     if request.method == 'POST':
-
-        # 사용자가 입력한 정보 가져오기
-        user_input = request.POST['second_user_input']
-        user_address = request.POST.get('address_input')
+        user_input = request.POST.get('second_user_input')
+        latitude = request.POST.get('latitude')
+        longitude = request.POST.get('longitude')
+        # 사용자 입력 토큰화 및 TF-IDF 값 계산
         keyword_input = tokenize_user_input(user_input)
         keyword_input = ' '.join(keyword_input)
-
-        # 주소
-        user_coordinates = get_address_info(user_address)
-        user_latitude = user_coordinates['Latitude'].iloc[0]
-        user_longitude = user_coordinates['Longitude'].iloc[0]
-
-        # 데이터 가져오기
-        queryset = take_modeldf()
-        data = list(queryset.values())
-        df = pd.DataFrame(data)
-
-        # TF-IDF matrix, vectorizer 가져오기
         tfidf_mat = load_tfidf_matrix()
         tfidf_vect = load_tfidf_vectorizer()
-
-        # 사용자 입력 키워드에 대한 TF-IDF 값 계산
-        keyword_input_mat = tfidf_vect.transform([(keyword_input)])
+        keyword_input_mat = tfidf_vect.transform([keyword_input])
         keyword_input_sim = cosine_similarity(keyword_input_mat, tfidf_mat)
         keyword_input_ind = keyword_input_sim.argsort()[:, ::-1]
-        
+        # 데이터 가져오기
+        queryset = take_djangodf()
+        data = list(queryset.values())
+        df = pd.DataFrame(data)
         result_df = df.iloc[keyword_input_ind[0]]
-
+        # 사용자 위치와의 거리가 15km 이내인 장소 필터링
+        user_latitude = float(latitude)
+        user_longitude = float(longitude)
         filtered_df = result_df[result_df.apply(lambda x: lat_long_distance(x['mapy'], x['mapx'], user_latitude, user_longitude) <= 15, axis=1)]
+        # 이미지 URL 가져오기
         filtered_df['selected_image_url'] = filtered_df['title'].apply(get_image_url)
-        recommended_places = filtered_df.head(5)
-        return render(request, 'rec_app/other.html', {'recommended_places' : recommended_places})
+        # 상위 5개 장소 선택
+        recommended_places = filtered_df.head(7)
+        # 로그 작성
+        # logger.info('Rec_address function executed successfully.')
+        return render(request, 'rec_app/rec_result.html', {'result_df': recommended_places})
     return render(request, 'rec_app/rec_input.html')
 
 
@@ -222,7 +217,7 @@ def login(request):
             return redirect('rec_app:home')
     else:
         form = AuthenticationForm()
-    return render(request, 'rec_app/signup.html', {
+    return render(request, 'rec_app/login.html', {
         'form': form
     })
 def logout(request):

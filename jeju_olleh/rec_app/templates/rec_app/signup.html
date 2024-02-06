@@ -1,12 +1,52 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="container mt-5">
-    <form method="POST" class="col-md-6 offset-md-3 mt-5">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <p class="mt-3">
-            <button type="submit" class="btn btn-primary">회원가입</button>
-        </p>
-    </form>
-</div>
+<style>
+    /* Form 스타일링 */
+    form {
+        max-width: 400px;
+        margin: 50px auto 0; /* 위쪽 여백 추가 */
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+    }
+
+    /* 입력 필드 스타일링 */
+    input[type="text"],
+    input[type="password"] {
+        width: 100%;
+        padding: 10px;
+        margin: 5px 0;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        box-sizing: border-box; /* 입력 필드 패딩 및 테두리를 요소의 크기에 포함 */
+    }
+
+    /* 버튼 스타일링 */
+    button {
+        width: 100%;
+        background-color: #4caf50;
+        color: white;
+        padding: 14px 20px;
+        margin: 8px 0;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    /* 버튼 호버 효과 */
+    button:hover {
+        background-color: #45a049;
+    }
+
+    
+</style>
+
+<form method='POST'>
+    {% csrf_token %}
+    {{ form.as_p }}
+    <p>
+        <button type="submit" class="btn btn-primary">SignUp</button>
+    </p>
+</form>
 {% endblock content %}

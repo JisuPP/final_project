@@ -1,7 +1,17 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>{{review.user}}</h1>
-<h3>{{ review.content }}</h3>
-<h4>{{ review.rate }}</h4>
-<a href="{% url 'review_app:index' title=title %}" class="Review">전체리뷰보기</a>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h1 class="card-title">{{ review.user }}</h1>
+                    <h3>{{ review.content }}</h3>
+                    <h4>평점: {{ review.rate }}</h4>
+                    <a href="{% url 'review_app:index' title=title %}" class="btn btn-primary">전체 리뷰 보기</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock content %}

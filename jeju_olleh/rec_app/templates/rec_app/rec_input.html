@@ -1,20 +1,13 @@
 {% extends 'base.html' %}
-
 {% block content %}
 <div class="hero">
     <div class="hero-slide">
-        <div
-        class="img overlay"
-        style="background-image: url('https://t4.ftcdn.net/jpg/05/26/12/59/360_F_526125944_Z01KZKcnbOBf4KM4WGXlIb5rW4dK1vOp.jpg')"
-        ></div>
+        <div class="img overlay" style="background-image: url('https://t4.ftcdn.net/jpg/05/26/12/59/360_F_526125944_Z01KZKcnbOBf4KM4WGXlIb5rW4dK1vOp.jpg')"></div>
     </div>
-
     <div class="container">
         <div class="row justify-content-center align-items-center">
             <div class="col-lg-9 text-center">
-                <h1 class="heading" data-aos="fade-up">
-                    제주 여행지를 찾는 가장 쉬운 방법
-                </h1>
+                <h1 class="heading" data-aos="fade-up">제주 여행지를 찾는 가장 쉬운 방법</h1>
                 <form method="post" action="{% url 'rec_app:rec_input' %}" class="narrow-w form-search d-flex align-items-stretch mb-3" data-aos="fade-up" data-aos-delay="200">
                     {% csrf_token %}
                     <input type="text" class="form-control px-4" name="user_input" placeholder="당신이 원하는 여행 타입을 입력해주세요" />
@@ -29,22 +22,107 @@
                 <br>
                 <br>
                 <br>
-
-                <h1 class="heading" data-aos="fade-up">
-                    제주 여행지를 찾는 가장 쉬운 방법 2번째
-                </h1>
-                <form method="post" action="{% url 'rec_app:rec_address' %}" class="narrow-w form-search d-flex align-items-stretch mb-3" data-aos="fade-up" data-aos-delay="200">
+                <h1 class="heading" data-aos="fade-up">내 근처 여행지 찾기</h1>
+                <form id="search-form" class="narrow-w form-search d-flex align-items-stretch mb-3" data-aos="fade-up" data-aos-delay="200">
                     {% csrf_token %}
-                    <input type="text" class="form-control px-4" name="second_user_input" placeholder="당신이 원하는 여행 타입을 입력해주세요" />
-                    <input type="text" class="form-control px-4" name="address_input" placeholder="현재 주소 혹은 여행 예정 주소지를 입력해주세요" />
-                    <div class="second_user-input">
-                        <button type="submit" class="btn btn-primary">search</button>
-                    </div>
+                    <input type="text" class="form-control px-4" id="address_input" placeholder="현재 주소 혹은 여행 예정 주소지를 입력해주세요" />
+                    <input type="text" class="form-control px-4" name="second_user_input" id="second_user_input" placeholder="당신이 원하는 여행 타입을 입력해주세요" />
+                    <button type="button" id="find_address_button" class="btn btn-primary">주소 찾기</button>
+                    <button type="button" id="search_button" class="btn btn-primary">Search</button>
+                    <!-- 추가: CSRF 토큰 -->
+                    <input type="hidden" id="csrf_token" value="{{ csrf_token }}">
                 </form>
+                <!-- 지도를 표시할 div -->
+                <div id="map" style="width:100%;height:350px;"></div>
             </div>
-
         </div>
     </div>
-
-
+</div>
+<!-- Kakao 지도 API JavaScript 파일 로드 -->
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=4b283ca680fbe75ed8194bbb0d2d82f9&libraries=services"></script>
+<!-- jQuery JavaScript 파일 로드 -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    // HTML이 로드된 후 JavaScript 코드를 실행합니다.
+    $(document).ready(function() {
+        var mapContainer = document.getElementById('map'); // 지도를 표시할 div
+        var mapOption = {
+            center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+            level: 3 // 지도의 확대 레벨
+        };
+        // 지도를 생성합니다
+        var map = new kakao.maps.Map(mapContainer, mapOption);
+        var marker = new kakao.maps.Marker();
+        marker.setMap(map);
+        // 지도에 클릭 이벤트를 등록합니다
+        kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
+            // 클릭한 위도, 경도 정보를 가져옵니다
+            var latlng = mouseEvent.latLng;
+            // 마커 위치를 클릭한 위치로 옮깁니다
+            marker.setPosition(latlng);
+        });
+        // 주소를 찾는 함수
+        function findAddress() {
+            var address = document.getElementById('address_input').value; // 입력된 주소 가져오기
+            // 지오코딩 객체를 생성합니다.
+            var geocoder = new kakao.maps.services.Geocoder();
+            // 주소로 좌표를 검색합니다.
+            geocoder.addressSearch(address, function(result, status) {
+                if (status === kakao.maps.services.Status.OK) {
+                    var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+                    // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다.
+                    map.setCenter(coords);
+                    // 마커를 결과값으로 받은 위치로 이동시킵니다.
+                    marker.setPosition(coords);
+                }
+            });
+        }
+        // 주소 찾기 버튼 클릭 시 주소를 찾는 함수 실행
+        document.getElementById('find_address_button').addEventListener('click', function() {
+            findAddress();
+        });
+        // Search 버튼 클릭 시 폼 제출
+        document.getElementById('search_button').addEventListener('click', function() {
+            var lat = marker.getPosition().getLat(); // 마커의 위도
+            var lng = marker.getPosition().getLng(); // 마커의 경도
+            var user_input = document.getElementById('second_user_input').value; // 사용자 입력
+            var address_input = document.getElementById('address_input').value; // 주소 입력
+            var csrf_token = document.getElementById('csrf_token').value; // CSRF 토큰 값 가져오기
+            // 폼 엘리먼트 생성
+            var form = document.createElement('form');
+            form.setAttribute('method', 'post');
+            form.setAttribute('action', '{% url "rec_app:rec_address" %}'); // 서버 URL 설정
+            form.style.display = 'none';
+            // 각 필드 추가
+            var inputLatitude = document.createElement('input');
+            inputLatitude.setAttribute('type', 'hidden');
+            inputLatitude.setAttribute('name', 'latitude');
+            inputLatitude.setAttribute('value', lat);
+            form.appendChild(inputLatitude);
+            var inputLongitude = document.createElement('input');
+            inputLongitude.setAttribute('type', 'hidden');
+            inputLongitude.setAttribute('name', 'longitude');
+            inputLongitude.setAttribute('value', lng);
+            form.appendChild(inputLongitude);
+            var inputUserInput = document.createElement('input');
+            inputUserInput.setAttribute('type', 'hidden');
+            inputUserInput.setAttribute('name', 'second_user_input');
+            inputUserInput.setAttribute('value', user_input);
+            form.appendChild(inputUserInput);
+            var inputAddressInput = document.createElement('input');
+            inputAddressInput.setAttribute('type', 'hidden');
+            inputAddressInput.setAttribute('name', 'address_input');
+            inputAddressInput.setAttribute('value', address_input);
+            form.appendChild(inputAddressInput);
+            var inputCsrfToken = document.createElement('input');
+            inputCsrfToken.setAttribute('type', 'hidden');
+            inputCsrfToken.setAttribute('name', 'csrfmiddlewaretoken');
+            inputCsrfToken.setAttribute('value', csrf_token);
+            form.appendChild(inputCsrfToken);
+            // 폼을 body에 추가하여 제출
+            document.body.appendChild(form);
+            form.submit();
+        });
+    });
+</script>
 {% endblock %}

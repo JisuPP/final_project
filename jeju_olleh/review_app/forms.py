@@ -20,7 +20,8 @@ class ReviewForm(forms.ModelForm): # 이름 모델과 맞춰서 생성
     )
     content = forms.CharField(
         widget=forms.Textarea(),
-        min_length=5
+        min_length=5,
+        label=''
      )
     class Meta: # 아래부터 코드의 생김새가 이런 이유는 그냥 장고가 그렇게 쓰게 만들어서..
         model = Review
