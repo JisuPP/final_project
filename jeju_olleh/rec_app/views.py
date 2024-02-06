@@ -3,7 +3,7 @@ import pandas as pd
 from .utils import tokenize_user_input, load_tfidf_matrix, load_tfidf_vectorizer, get_nearest_weather_data, get_address_info, lat_long_distance, get_image_url, take_modeldf, take_djangodf, create_folium_map
 from sklearn.metrics.pairwise import cosine_similarity
 from django.conf import settings
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 import csv
 from django.http import HttpResponse
 from .models import DjangoDf
@@ -184,3 +184,47 @@ def find_route(request):
 
 def kakao(request):
     return render(request, 'rec_app/kakao.html')
+
+##########################################################################################
+# 리뷰
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth import login as llogin, logout as llogout
+from django.contrib import messages
+from django.contrib.auth import authenticate, login
+from django.views.decorators.http import require_http_methods
+
+# 회원가입
+@require_http_methods(['GET', 'POST'])
+def signup(request):
+    if request.user.is_authenticated:
+        return redirect('rec_app:home')
+    if request.method == 'POST':
+        form = UserCreationForm(data=request.POST)
+        if form.is_valid():
+            user = form.save()
+            llogin(request, user)
+            return redirect('rec_app:home')
+    else:
+        form = UserCreationForm()
+    return render(request, 'rec_app/signup.html', {
+        'form':form
+    })
+# 로그인
+@require_http_methods(['GET', 'POST'])
+def login(request):
+    if request.user.is_authenticated:
+        return redirect('rec_app:home')
+    if request.method == 'POST':
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            llogin(request, user)
+            return redirect('rec_app:home')
+    else:
+        form = AuthenticationForm()
+    return render(request, 'rec_app/signup.html', {
+        'form': form
+    })
+def logout(request):
+    llogout(request)
+    return redirect('rec_app:home')

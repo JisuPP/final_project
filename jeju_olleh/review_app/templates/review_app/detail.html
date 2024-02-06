@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>{{review.user}}</h1>
+<h3>{{ review.content }}</h3>
+<h4>{{ review.rate }}</h4>
+<a href="{% url 'review_app:index' title=title %}" class="Review">전체리뷰보기</a>
+{% endblock content %}

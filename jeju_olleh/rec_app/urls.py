@@ -26,5 +26,11 @@ urlpatterns = [
 
     # 길찾기
     path('find_route/', views.find_route, name='find_route'),
-    path('kakao/', views.kakao, name='kakao')
+    path('kakao/', views.kakao, name='kakao'),
+
+    # 회원가입
+    path('signup/', views.signup, name='signup'),
+    # 로그인
+    path('login/', views.login, name='login'),
+    path('logout/', views.logout, name='logout'),
 ]

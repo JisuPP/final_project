@@ -14,15 +14,19 @@
 
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gamja+Flower&display=swap" />
         <link
         href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600;700&display=swap"
         rel="stylesheet"/>
+        
+
 
         <link rel="stylesheet" href="{% static 'fonts/icomoon/style.css' %}" />
         <link rel="stylesheet" href="{% static 'fonts/flaticon/font/flaticon.css' %}" />
         <link rel="stylesheet" href="{% static 'css/tiny-slider.css' %}" />
         <link rel="stylesheet" href="{% static 'css/aos.css' %}" />
         <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+        
 
         <title>
         제주에서 어디올레? &mdash; 여행지 추천 서비스
@@ -51,7 +55,20 @@
                 <li class="active" style="font-weight: bold;"><a href="{% url 'rec_app:home' %}" class="Home">Home</a>
                 <li class="active" style="font-weight: bold;"><a href="{% url 'rec_app:map' %}" class="Map">Map</a>
                 <li class="active" style="font-weight: bold;"><a href="{% url 'rec_app:about' %}" class="About">About</a>
-                </ul>
+                  {% if not request.user.is_authenticated %}
+                  <li>
+                      <a href="{% url "rec_app:login" %}">Login</a>
+                  </li>
+                  <li>
+                      <a href="{% url "rec_app:signup" %}">Signup</a>
+                  </li>
+                  {% else %}
+                  <li>
+                      <a href="{% url "rec_app:logout" %}">Logout</a>
+                  </li>
+                  {% endif %}
+                </ul> 
+                
 
                 <a
                 href="#"
@@ -94,5 +111,6 @@
         <script src="{% static 'js/navbar.js' %}"></script>
         <script src="{% static 'js/counter.js' %}"></script>
         <script src="{% static 'js/custom.js' %}"></script>
+        <link rel="stylesheet" href="css/style.css" />
     </body>
 </html>

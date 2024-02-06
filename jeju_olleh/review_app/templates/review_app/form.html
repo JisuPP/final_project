@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="container">
+    <h1 class="mt-5">리뷰 작성</h1>
+    <form method="post" class="mt-4">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="btn btn-primary">리뷰 작성</button>
+    </form>
+  </div>
+{% endblock content %}

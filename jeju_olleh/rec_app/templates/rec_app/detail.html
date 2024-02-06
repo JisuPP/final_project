@@ -61,6 +61,20 @@ style="background-image: url('https://blog.kakaocdn.net/dn/o1KIw/btqu9mflPY6/rGk
                     <br>
                     구글 리뷰 수: {{ selected_destination.reviews }} 개
                 </p>
+                <ul>
+                    {% if request.user.is_authenticated %}
+                    <li>
+                        <a href="{% url 'review_app:create' title=selected_destination.title %}">리뷰쓰기</a>
+                    </li>
+                    <li>
+                        <a href="{% url "review_app:index" title=selected_destination.title %}">리뷰 전체보기</a>
+                    </li>
+                    {% else %}
+                    <li>
+                        <a href="{% url "review_app:index" title=selected_destination.title %}">리뷰 전체보기</a>
+                    </li>
+                    {% endif %}
+                </ul>
                 <h4>✔️ 주소</h4>   
                 <p class="text-black-50">{{ selected_destination.addr1 }} </p>
                 <h4>✔️ 오늘의 날씨</h4>
