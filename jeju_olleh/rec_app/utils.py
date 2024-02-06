@@ -150,10 +150,10 @@ def get_nearest_weather_data(place_name):
                 base_time = f"0{datetime.now().hour - 1:02d}30"
 
         # 날씨 데이터 가져오기
-        weather_data = get_weather_data(api_key, base_date, base_time, nearest_x, nearest_y)
+        # weather_data = get_weather_data(api_key, base_date, base_time, nearest_x, nearest_y)
 
         # 가져온 날씨 정보를 반환
-        return weather_data 
+        # return weather_data 
 
 # 날씨 정보
 def get_weather_data(api_key, base_date, base_time, nearest_x, nearest_y):

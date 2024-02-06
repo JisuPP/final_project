@@ -174,3 +174,13 @@ def map(request):
 #             'index': item.index,
 #         })
 #     return response
+
+def find_route(request):
+    locations = DjangoDf.objects.values('title', 'mapx', 'mapy')
+
+    # HTML 페이지에 데이터 전달
+    context = {'locations': locations}
+    return render(request, 'rec_app/find_route.html', context)
+
+def kakao(request):
+    return render(request, 'rec_app/kakao.html')

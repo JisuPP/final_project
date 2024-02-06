@@ -24,4 +24,7 @@ urlpatterns = [
     # DB > CSV
     # path('export-to-csv/', views.export_to_csv, name='export_to_csv'),
 
+    # 길찾기
+    path('find_route/', views.find_route, name='find_route'),
+    path('kakao/', views.kakao, name='kakao')
 ]
