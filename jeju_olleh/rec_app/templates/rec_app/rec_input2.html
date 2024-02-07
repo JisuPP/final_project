@@ -16,7 +16,21 @@
                 <br>
                 <br>
                 <br>
-                <h1 class="heading" data-aos="fade-up">제주 여행지를 찾는 가장 쉬운 방법</h1>
+                 <h1 class="heading" data-aos="fade-up">제주 여행지를 찾는 가장 쉬운 방법</h1> 
+                 <form method="post" action="{% url 'rec_app:rec_input' %}" class="narrow-w form-search mb-3 d-flex" data-aos="fade-up" data-aos-delay="200">
+                    {% csrf_token %}
+                    <input type="text" class="form-control px-4 mr-2" name="user_input" placeholder="당신이 원하는 여행 타입을 입력해주세요" />
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </form>
+                
+                
+                
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                {% comment %} <h1 class="heading" data-aos="fade-up">제주 여행지를 찾는 가장 쉬운 방법</h1>
                 <form id="search-form" class="narrow-w form-search mb-3" data-aos="fade-up" data-aos-delay="200">
                     {% csrf_token %}
                     <div class="d-flex justify-content-center mb-3">
@@ -30,7 +44,8 @@
                     <!-- 추가: CSRF 토큰 -->
                     <input type="hidden" id="csrf_token" value="{{ csrf_token }}">
                 </form>
-                <a href="{% url 'rec_app:rec_input2' %}" class="text-white recommend-link" style="font-size: 20px;">주소없이 추천 받기</a>
+                 {% endcomment %}
+                
                 <!-- 지도를 표시할 div -->
                 <div id="map" style="width:100%;height:350px;"></div>
             </div>
@@ -79,20 +94,18 @@
                 // 마커 위치를 클릭한 위치로 옮깁니다
                 marker.setPosition(latlng);
             });
-            // '주소없이 추천 받기' 링크 숨기기
-            $('.recommend-link').hide();
         }
         // 주소 찾기 버튼 클릭 시 주소를 찾는 함수 실행
-        $('#find_address_button').click(function() {
+        document.getElementById('find_address_button').addEventListener('click', function() {
             findAddress();
         });
         // Search 버튼 클릭 시 폼 제출
-        $('#search_button').click(function() {
+        document.getElementById('search_button').addEventListener('click', function() {
             var lat = marker.getPosition().getLat(); // 마커의 위도
             var lng = marker.getPosition().getLng(); // 마커의 경도
-            var user_input = $('#second_user_input').val(); // 사용자 입력
-            var address_input = $('#address_input').val(); // 주소 입력
-            var csrf_token = $('#csrf_token').val(); // CSRF 토큰 값 가져오기
+            var user_input = document.getElementById('second_user_input').value; // 사용자 입력
+            var address_input = document.getElementById('address_input').value; // 주소 입력
+            var csrf_token = document.getElementById('csrf_token').value; // CSRF 토큰 값 가져오기
             // 폼 엘리먼트 생성
             var form = document.createElement('form');
             form.setAttribute('method', 'post');

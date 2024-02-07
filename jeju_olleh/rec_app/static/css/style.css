@@ -2564,24 +2564,24 @@ textarea.form-control-lg {
 
 .btn-primary {
   color: #fff;
-  background-color: #00204a;
-  border-color: #00204a; }
+  background-color: #005555;
+  border-color: #005555;} 
   .btn-primary:hover {
     color: #fff;
-    background-color: #001b3f;
-    border-color: #001a3b; }
+    background-color: #005555;
+    border-color: #005555; }
   .btn-check:focus + .btn-primary, .btn-primary:focus {
     color: #fff;
-    background-color: #001b3f;
-    border-color: #001a3b;
+    background-color: #005555;
+    border-color: #005555;
     -webkit-box-shadow: 0 0 0 0.25rem rgba(38, 65, 101, 0.5);
     box-shadow: 0 0 0 0.25rem rgba(38, 65, 101, 0.5); }
   .btn-check:checked + .btn-primary,
   .btn-check:active + .btn-primary, .btn-primary:active, .btn-primary.active,
   .show > .btn-primary.dropdown-toggle {
     color: #fff;
-    background-color: #001a3b;
-    border-color: #001838; }
+    background-color: #005555;
+    border-color: #005555; }
     .btn-check:checked + .btn-primary:focus,
     .btn-check:active + .btn-primary:focus, .btn-primary:active:focus, .btn-primary.active:focus,
     .show > .btn-primary.dropdown-toggle:focus {
@@ -2589,8 +2589,8 @@ textarea.form-control-lg {
       box-shadow: 0 0 0 0.25rem rgba(38, 65, 101, 0.5); }
   .btn-primary:disabled, .btn-primary.disabled {
     color: #fff;
-    background-color: #00204a;
-    border-color: #00204a; }
+    background-color: #005555;
+    border-color: #005555; }
 
 .btn-secondary {
   color: #fff;
@@ -9831,9 +9831,12 @@ textarea {
   -webkit-transition: .3s all ease;
   -o-transition: .3s all ease;
   transition: .3s all ease; }
-  .btn.btn-primary {
-    background: #005555;
-    color: #fff; }
+  .btn-primary {
+    color: #fff;
+    background-color: #00204A;
+    border-color: #00204A;
+    width: 200px; /* 가로 크기 */
+    height: 50px; /* 세로 크기 */}
   .btn:hover {
     top: -2px;
     -webkit-box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.1);

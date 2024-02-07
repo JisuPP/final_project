@@ -37,7 +37,7 @@ def rec_input(request):
         keyword_input_ind = keyword_input_sim.argsort()[:, ::-1]
 
         # 결과 DataFrame 생성
-        result_df = df.iloc[keyword_input_ind[0, :10]].sort_values('rating', ascending=False)[:7]
+        result_df = df.iloc[keyword_input_ind[0, :10]].sort_values('rating', ascending=False)[:6]
 
         if not result_df.empty:
 
@@ -102,11 +102,48 @@ def rec_address(request):
         # 이미지 URL 가져오기
         filtered_df['selected_image_url'] = filtered_df['title'].apply(get_image_url)
         # 상위 5개 장소 선택
-        recommended_places = filtered_df.head(7)
+        recommended_places = filtered_df.head(6)
         # 로그 작성
         # logger.info('Rec_address function executed successfully.')
         return render(request, 'rec_app/rec_result.html', {'result_df': recommended_places})
-    return render(request, 'rec_app/rec_input.html')
+    return render(request, 'rec_app/rec_input2.html')
+
+def rec_input2(request):
+    if request.method == 'POST':
+        # user_input 토큰화
+        user_input = request.POST['user_input']
+        keyword_input = tokenize_user_input(user_input)
+
+        # data 가져오기
+        # file_path = os.path.join(settings.BASE_DIR, 'jeju_olleh', 'modules', 'fin_token.csv')
+        # df = pd.read_csv(file_path, encoding='utf-8')
+        queryset = take_djangodf()
+        # 쿼리셋을 리스트로 변환
+        data = list(queryset.values())
+        # 데이터프레임으로 변환
+        df = pd.DataFrame(data)
+
+        # TF-IDF matrix, vect 가져오기
+        tfidf_mat = load_tfidf_matrix()
+        tfidf_vect = load_tfidf_vectorizer()
+
+        keyword_input_mat = tfidf_vect.transform([' '.join(keyword_input)])
+        keyword_input_sim = cosine_similarity(keyword_input_mat, tfidf_mat)
+        keyword_input_ind = keyword_input_sim.argsort()[:, ::-1]
+
+        # 결과 DataFrame 생성
+        result_df = df.iloc[keyword_input_ind[0, :10]].sort_values('rating', ascending=False)[:6]
+
+        if not result_df.empty:
+
+            #이미지 URL 추가
+            result_df['selected_image_url'] = result_df['title'].apply(get_image_url)
+
+            # 결과를 HTML로 전달
+            return render(request, 'rec_app/rec_result.html', {'result_df': result_df})
+    
+    # GET 요청에 대한 처리를 추가
+    return render(request, 'rec_app/rec_input2.html')
 
 
 def map(request):
